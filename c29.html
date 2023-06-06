@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+29
+" class="index-link">← retour</a>
+<h1 id="match">Match</h1>
+<p>Il existe un embranchement spécialisé pour matcher des paternes. Il fonctionne avec n’importe quel paterne.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">match</span> event <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="pp">Event::</span>Quit <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;la fête est finie&quot;</span>)<span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="pp">Event::</span>Click (x<span class="op">,</span> y) <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> x <span class="op">==</span> y <span class="op">{</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>            <span class="pp">println!</span>(<span class="st">&quot;diagonal!&quot;</span>)<span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="pp">Event::</span>Keyboard <span class="op">{</span> key<span class="op">:</span> _<span class="op">,</span> shift<span class="op">:</span> <span class="cn">false</span> <span class="op">}</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;qui tapote, vivote&quot;</span>)<span class="op">;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="pp">Event::</span>Keyboard <span class="op">{</span> key<span class="op">,</span> shift<span class="op">:</span> <span class="cn">true</span> <span class="op">}</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;PAS LA PEINE DE CRIER {}&quot;</span><span class="op">,</span> key)<span class="op">;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Il permet une écriture plus compacte et concise que le <code>if let</code> :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> message_jour(j<span class="op">:</span> JourSemaine) <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">match</span> j <span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="pp">JourSemaine::</span>Lundi <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">&quot;Je n&#39;irai pas travailler&quot;</span>)<span class="op">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="pp">JourSemaine::</span>Mardi <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">&quot;Je prépare des crèpes&quot;</span>)<span class="op">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="pp">JourSemaine::</span>Mercredi <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">&quot;Je fais la sieste&quot;</span>)<span class="op">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        <span class="pp">JourSemaine::</span>Jeudi <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">&quot;C&#39;est manif !&quot;</span>)<span class="op">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        <span class="pp">JourSemaine::</span>Vendredi <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">&quot;Le weekend, que c&#39;est bon.&quot;</span>)<span class="op">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        <span class="pp">JourSemaine::</span>Samedi <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">&quot;Gilets jaunes&quot;</span>)<span class="op">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        <span class="pp">JourSemaine::</span>Dimanche <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">&quot;Je reste sous la couette&quot;</span>)<span class="op">,</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="fibonacci">Fibonacci</h2>
+<p>Créons une fonction qui retourne le n’ième terme de la suite de Fibonacci.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> fibonacci(n<span class="op">:</span> <span class="dt">usize</span>) <span class="op">-&gt;</span> <span class="dt">u128</span> <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">match</span> n <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="dv">0</span> <span class="op">=&gt;</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span> <span class="op">=&gt;</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=&gt;</span> fibonacci(n <span class="op">-</span> <span class="dv">1</span>) <span class="op">+</span> fibonacci(n <span class="op">-</span> <span class="dv">2</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Élégant non ?</p>
+<p>Si <code>n</code> vaut <code>0</code> ou <code>1</code>, il peut matcher avec le paterne <code>x</code>, mais les paternes sont testés dans l’ordre, donc on peut être sure que les deux paternes <code>0</code> et <code>1</code> captureront respectivement les valeurs <code>0</code> et <code>1</code>.</p>
+    </body>
+</html>

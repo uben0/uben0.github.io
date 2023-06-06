@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+26
+" class="index-link">← retour</a>
+<h1 id="chaînes-de-caractère">Chaînes de caractère</h1>
+<p>On a vu que pour stocker une chaîne de caractère on utilise <code>String</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> nom<span class="op">:</span> <span class="dt">String</span> <span class="op">=</span> user_input()<span class="op">;</span></span></code></pre></div>
+<p>Pourtant, si on essaye simplement de lui affecter un literal, ça ne passe pas:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> nom<span class="op">:</span> <span class="dt">String</span> <span class="op">=</span> <span class="st">&quot;Hello&quot;</span><span class="op">;</span> <span class="co">// ERROR</span></span></code></pre></div>
+<p>Le compilateur se plein que le type attendu est <code>String</code> mais que le type passé est <code>&amp;str</code>. Ces deux types sont différents.</p>
+<p>En fait <code>&amp;str</code> est une référence vers une chaîne de caractères. Le type <code>str</code> est quasiment identique à <code>[u8]</code> (j’expliquerai la différence, supposons qu’il sont identique pour l’instant), donc il s’agit d’un tableau d’octets. Étant donné que la taille n’ai pas connu par le type, <code>&amp;str</code> est un pointeur lourd, il est acompagné de la taille du tableau.</p>
+<pre><code>poiteur lourd         chaîne de caractère en mémoire
+▄┏━━━━━━━━━┓          ┌───┬───┬───┬───┬───┐
+█┃ 0x7f004 ┣━╺╺╺╺╺╺╺╺◆│ H │ e │ l │ l │ o │
+█┡━━━━━━━━━┩          └───┴───┴───┴───┴───┘
+█│       5 │
+▀└─────────┘</code></pre>
+<p>Un <code>&amp;str</code> ne permet pas de stocker une chaîne de caractère, seulement d’en pointer une en mémoire. Il ne possède pas cette chaîne. Alors que <code>String</code> aloue dynamiquement son propre segment pour stocker une chaîne de charactère.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> s <span class="op">=</span> <span class="dt">String</span><span class="pp">::</span>from(<span class="st">&quot;Hello&quot;</span>)<span class="op">;</span></span></code></pre></div>
+<pre><code>struct String          segment alloué possédé par la structure
+▄┏━━━━━━━━━┓          ▄┌───┬───┬───┬───┬───┐ ─ ┬ ─ ┬ ─ ┐
+█┃ 0x420f2 ┣━╺╺╺╺╺╺╺╺◆█│ H │ e │ l │ l │ o │
+█┡━━━━━━━━━┩          ▀└───┴───┴───┴───┴───┘ ─ ┴ ─ ┴ ─ ┘
+█│       8 │ capacité
+█├─────────┤
+█│       5 │ utilisation
+▀└─────────┘</code></pre>
+<p>Il existe une méthode <code>as_str</code> sur <code>String</code> qui permet de retourner un pointeur sur la chaîne de caractères.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">String</span> <span class="op">=</span> <span class="dt">String</span><span class="pp">::</span>from(<span class="st">&quot;Hello&quot;</span>)<span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span> <span class="op">=</span> a<span class="op">.</span>as_str()<span class="op">;</span></span></code></pre></div>
+<h1 id="bytes-versus-chars">Bytes versus Chars</h1>
+<p>En Rust, un caractère n’est pas un octet (<code>char</code> différent de <code>u8</code>), un caractère est codé sur 32 bits, c’est un caractère unicode. Les caractères ne sont donc pas limités à la table ASCII:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> hiragana<span class="op">:</span> <span class="dt">char</span> <span class="op">=</span> <span class="ch">&#39;あ&#39;</span><span class="op">;</span></span></code></pre></div>
+<p>Il est possible d’utiliser des octets à l’ancienne, comme en C.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> ascii<span class="op">:</span> <span class="dt">u8</span> <span class="op">=</span> <span class="ch">b&#39;A&#39;</span><span class="op">;</span></span></code></pre></div>
+<p>Il faut placer un <code>b</code> devant <code>' '</code> pour indiquer que c’est un octet, c’est le <code>b</code> de <code>b</code>yte.</p>
+<p>Il existe une méthode <code>as_bytes</code> sur les chaîne de caractères pour qu’elles retournes un poiteur sur le tableau d’octets:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> unicode<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span> <span class="op">=</span> <span class="st">&quot;こんにちは世界&quot;</span><span class="op">;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> bytes<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u8</span>] <span class="op">=</span> unicode<span class="op">.</span>as_bytes()<span class="op">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:#?}&quot;</span><span class="op">,</span> bytes)<span class="op">;</span></span></code></pre></div>
+<pre><code>[
+    227,
+    129,
+    147,
+    227,
+    130,
+    147,
+    227,
+    129,
+    171,
+    227,
+    129,
+    161,
+    227,
+    129,
+    175,
+    228,
+    184,
+    150,
+    231,
+    149,
+    140,
+]</code></pre>
+<p>La raison pour laquelle il existe un type <code>str</code> et pas juste <code>[u8]</code>, c’est parce que Rust garantie qu’une chaine de caractère est de l’UTF8 valide, hors, avec un <code>[u8]</code> on serrait libre de changer les octets comme bon nous semble sans respecter l’encodage UTF8.</p>
+<p>Les chaînes de caractère ne sont pas non plus des <code>[char]</code> car même si ce serait plus élégant, cela prendrai beaucoup plus de place, chaque caractère ferait 32 bits de large au lieu de 8. Mais surtout ne permetrait pas une interopérabilité facile avec le système.</p>
+    </body>
+</html>

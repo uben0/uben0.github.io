@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+01
+" class="index-link">← retour</a>
+<h1 id="introduction">Introduction</h1>
+<p>Le langage Rust se veut être le successeur du langage C, une sorte de version moderne de ce dernier. La raison pour la quelle j’apprécie ce langage est qu’il est cohérant, c’est à dire que les règles selon lesquelles est construit le langage n’ont quasiment jamais d’exceptions.</p>
+<ul>
+<li>Le langage Rust est très performant, il est parmi les plus performant.</li>
+<li>C’est un langage compilé, comme le C.</li>
+<li>Il garantie qu’il n’y a pas de bugs.</li>
+<li>Il est très facile d’utiliser des bibliothèques.</li>
+<li>Plusieurs outils sont fourni avec, comme un gestionnaire de projet qui gère la compilation, les bibliothèques, la documentation et les tests, rien que ça.</li>
+<li>Une bibliothèque standard iréprochable.</li>
+<li>Une documentation claire et complète.</li>
+<li>Un program Rust est indépendant de la plateforme. Un projet compilera sous Linux, Windows ou MacOS sans aucun soucis.</li>
+<li>Il permet d’utiliser des techniques tel que le multithreading ou la programmation asynchrone (qui sont amené à être omniprésent dans le future), tout en garantissant l’absence de bug.</li>
+</ul>
+<h2 id="hello-world">Hello World</h2>
+<p>En C:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Hello World!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>En Rust:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="pp">println!</span>(<span class="st">&quot;Hello World!&quot;</span>)<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="déclaration-des-variables">Déclaration des variables</h2>
+<p>En C:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code></pre></div>
+<p>En Rust:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code></pre></div>
+<h2 id="déclaration-des-fonctions">Déclaration des fonctions</h2>
+<p>En C:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">+</span> b<span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>En Rust:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> add(a<span class="op">:</span> <span class="dt">i32</span><span class="op">,</span> b<span class="op">:</span> <span class="dt">i32</span>) <span class="op">-&gt;</span> <span class="dt">i32</span> <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> a <span class="op">+</span> b<span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="les-types">Les types</h2>
+<p>Voici une correspondance aproxymative des types entre Rust et C:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Rust</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>i8</code></td>
+<td><code>char</code></td>
+</tr>
+<tr class="even">
+<td><code>i16</code></td>
+<td><code>short int</code></td>
+</tr>
+<tr class="odd">
+<td><code>i32</code></td>
+<td><code>int</code></td>
+</tr>
+<tr class="even">
+<td><code>i64</code></td>
+<td><code>long int</code></td>
+</tr>
+<tr class="odd">
+<td><code>u8</code></td>
+<td><code>unsigned char</code></td>
+</tr>
+<tr class="even">
+<td><code>u16</code></td>
+<td><code>unsigned short int</code></td>
+</tr>
+<tr class="odd">
+<td><code>u32</code></td>
+<td><code>unsigned int</code></td>
+</tr>
+<tr class="even">
+<td><code>u64</code></td>
+<td><code>unsigned long int</code></td>
+</tr>
+<tr class="odd">
+<td><code>f32</code></td>
+<td><code>float</code></td>
+</tr>
+<tr class="even">
+<td><code>f64</code></td>
+<td><code>double</code></td>
+</tr>
+<tr class="odd">
+<td><code>bool</code></td>
+<td><code>bool</code></td>
+</tr>
+<tr class="even">
+<td><code>char</code></td>
+<td><code>char</code></td>
+</tr>
+<tr class="odd">
+<td><code>()</code></td>
+<td><code>void</code></td>
+</tr>
+</tbody>
+</table>
+<p>Il y a bien plus de types, mais ils seront couverts par la suite, par exemple, les tableaux, les références (pointeurs), les énumérations …</p>
+<h2 id="installation">Installation</h2>
+<p>Le plus propre pour intsaller est d’utiliser son gestionaire de paquet. Sous <em>Debian</em> et <em>Ubuntu</em>, avec <code>apt</code> :</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install cargo rust</span></code></pre></div>
+<p>Sinon, il est possible d’installer manuellement, grâce au script fourni sur le site officielle du language :</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">--proto</span> <span class="st">&#39;=https&#39;</span> <span class="at">--tlsv1.2</span> <span class="at">-sSf</span> https://sh.rustup.rs <span class="kw">|</span> <span class="fu">sh</span></span></code></pre></div>
+    </body>
+</html>

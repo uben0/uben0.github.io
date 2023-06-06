@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+02
+" class="index-link">← retour</a>
+<h1 id="compilation">Compilation</h1>
+<p>On pourrai utiliser la commande <code>rustc</code> (le compilateur Rust) pour compiler un programme, mais il vaut mieux utiliser <code>cargo</code>. Pour comparer avec le C, <code>rustc</code> correspond à <code>gcc</code> (le compilateur) et <code>cargo</code> à <code>make</code> (le gestionnaire de projet).</p>
+<p>Pour créer un nouveau projet nomé <code>hello-world</code>, il faut éxécuter la commande:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> new hello-world <span class="at">--vcs</span> none</span></code></pre></div>
+<p>(si on ne met pas <code>--vcs none</code>, le répertoir créé sera un répertoir git, hors ici nous n’en avons pas l’utilité)</p>
+<p>Un dossier <code>hello-world</code> a été créé contenant un projet de base:</p>
+<pre><code>hello-world/
+├─ Cargo.toml
+└─ src/
+   └─ main.rs</code></pre>
+<p>Allons dedans:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> hello-world</span></code></pre></div>
+<p>Le fichier <code>Cargo.toml</code> est l’équivalent du <code>Makefile</code> ou <code>CMake</code> en C, il contient les informations du projet, comment il doit être compilé, quels bibliothèques il utilise, etc…</p>
+<p>Le dossier <code>src/</code> contient les fichiers sources, qui en Rust finissent par <code>.rs</code>. Le <code>main.rs</code> contient un <strong>Hello World</strong> :</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="pp">println!</span>(<span class="st">&quot;Hello, world!&quot;</span>)<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Pour compiler et lancer le programme, éxécutons :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> run</span></code></pre></div>
+<p>Cette commande va intéligemment comprendre ce qui doit être compilé et lancé. Il devrait s’afficher :</p>
+<pre><code>Hello, world!</code></pre>
+<p>Un fichier <code>Cargo.lock</code> et un dossier <code>target/</code> sont apparus, ils sont créés et utilisés par <code>cargo</code>, il n’y a pas besoins de s’en préoccuper.</p>
+<h2 id="dispute-avec-le-compilateur">Dispute avec le compilateur</h2>
+<p>En Rust, il y a des règles très strictes, notre code ne compilera pas tant qu’il ne les respectera pas, cela permet de garantir que si notre code compile, alors, c’est qu’il ne contient pas d’erreur. Ce peut être très frustrant au début, de ne pas réussir à satisfaire le compilateur alors que notre code semble valide, mais ce n’est qu’un temps d’adaptation qui en vaut la peine, car quand en C, notre programme compile, on passe généralement 90% de notre temps à corriger des buggs causés par des erreurs d’inattentions. Grâce aux règles strictes en Rust, cela ne se produit pas.</p>
+<p>Quand Rust rend impossible la compilation de code car il ne respecte pas certaines règles, on peut avoir l’impression que cela rend impossible la réalisation du projet, que Rust est trop restrictif, mais retenons bien que si Rust ne permet pas quelque chose, c’est qu’il existe une bien meilleur façon de le faire, elle est juste moins évidente.</p>
+    </body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+17
+" class="index-link">← retour</a>
+<h1 id="déplacé-ou-copié">Déplacé ou copié</h1>
+<h2 id="déplacé-et-non-copié">Déplacé et non copié</h2>
+<p>Créons deux variables en en copiant une.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a <span class="op">=</span> <span class="dv">23</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b <span class="op">=</span> a<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{} {}&quot;</span><span class="op">,</span> a<span class="op">,</span> b)<span class="op">;</span></span></code></pre></div>
+<p>Maintenant faisons la même chose mais avec notre structure <code>Point</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> p1 <span class="op">=</span> Point <span class="op">{</span> x<span class="op">:</span> <span class="dv">10.0</span><span class="op">,</span> y<span class="op">:</span> <span class="dv">7.0</span> <span class="op">};</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> p2 <span class="op">=</span> p1<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?} {:?}&quot;</span><span class="op">,</span> p1<span class="op">,</span> p2)<span class="op">;</span> <span class="co">// ERROR</span></span></code></pre></div>
+<p>Le compilateur se plein que <code>p1</code> a été déplacée. Effectivement, par défaut, un type ne peut pas être copié, il est déplacé. La valeur stocké dans la variable <code>p1</code> est déplacé vers la variable <code>p2</code>.</p>
+<p>Par exemple, quand on construit une structure <code>Cercle</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> p<span class="op">:</span> Point <span class="op">=</span> Point <span class="op">{</span> x<span class="op">:</span> <span class="dv">10.0</span><span class="op">,</span> y<span class="op">:</span> <span class="dv">7.0</span> <span class="op">};</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> c<span class="op">:</span> Cercle <span class="op">=</span> Cercle <span class="op">{</span> centre<span class="op">:</span> p<span class="op">,</span> rayon<span class="op">:</span> <span class="dv">2.0</span> <span class="op">};</span> <span class="co">// &#39;p&#39; est déplacé</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> p)<span class="op">;</span> <span class="co">// ERROR</span></span></code></pre></div>
+<p>Ici, la valeur de <code>p</code> est utilisé pour construire la valeur de <code>c</code>, donc la valeur de type <code>Point</code> a été déplacé à l’intérieur de la valeur de type <code>Cercle</code>.</p>
+<h2 id="copié-et-non-déplacé">Copié et non déplacé</h2>
+<p>On a vu que quand on utilise une valeur du type <code>u32</code>, <code>i32</code>, <code>bool</code>, <code>char</code> et pleins d’autres, cette dernière est copiée et non déplacée.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b <span class="op">=</span> a<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{} {}&quot;</span><span class="op">,</span> a<span class="op">,</span> b)<span class="op">;</span></span></code></pre></div>
+<p>Alors pourquoi dans certains cas, la valeur est copiée et dans d’autres déplacée ?</p>
+<p>La capacité d’un type à se cloner est décrit par un <code>trait</code> appelé <code>Clone</code>. Nous n’avons pas encore vu les <code>trait</code>s, c’est un sujet crucial mais il est encore trop tôt pour en parler, pour l’instant, il faut juste comprendre qu’un <code>trait</code> est une abilité qu’un type peut avoir, comme par exemple se cloner, qui est décrit par le trait <code>Clone</code> définit dans la bibliothèque standard.</p>
+<p>La plupart des types peuvent être clonés mais peu peuvent être copiés. C’est quoi la différence entre cloner et copier ? L’idée est que l’on califie un type de copiable quand le cloner ne consiste qu’à ne copier quelques octets et que ça n’engendre pas d’opéraitions tiers comme de l’alocation de mémoire. Par exemple, les entiers sont copiables mais une <code>String</code> ne l’est pas car la cloner entraine une allocation de mémoire dynamique.</p>
+<p>La capacité d’un type à être copié est décrit par le trait <code>Copy</code>, qui lui aussi est definit dans la bibliothèque standard.</p>
+<h2 id="dérivation">Dérivation</h2>
+<p>Pour faire en sorte que nos structure <code>Point</code> et <code>Cercle</code> soit clonables et copiables on peut dériver les traits <code>Clone</code> et <code>Copy</code> sur eux grâce à la directive <code>#[derive(...)]</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="bu">Copy</span><span class="at">)]</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Point <span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    y<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="bu">Copy</span><span class="at">)]</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Cercle <span class="op">{</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    centre<span class="op">:</span> Point<span class="op">,</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    rayon<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Et oui, <code>Debug</code> est aussi un <code>trait</code> qui décrit une abilité qu’a un type, qui est de s’afficher en détails dans un terminal.</p>
+<p>Maintenant, <code>Point</code> et <code>Cercle</code> seront copiés et non déplacés, à la façon des entiers.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> p1 <span class="op">=</span> Point <span class="op">{</span> x<span class="op">:</span> <span class="dv">10.0</span><span class="op">,</span> y<span class="op">:</span> <span class="dv">7.0</span> <span class="op">};</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> p2 <span class="op">=</span> p1<span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?} {:?}&quot;</span><span class="op">,</span> p1<span class="op">,</span> p2)<span class="op">;</span></span></code></pre></div>
+<p>Pratique !</p>
+    </body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+31
+" class="index-link">← retour</a>
+<h1 id="option">Option</h1>
+<p>Une énumération appelée <code>Option</code> est définit dans la bibliothèque standard.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> <span class="dt">Option</span><span class="op">&lt;</span>T<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Some</span>(T)<span class="op">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cn">None</span><span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Cette énumération représente l’idée qu’une valeur n’est pas forcément présente. Par exemple, imaginons une fonction qui cherche un élément dans un tableau et retourne son indice.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> cherche_tableau_u32(t<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u32</span>]<span class="op">,</span> n<span class="op">:</span> <span class="dt">u32</span>) <span class="op">-&gt;</span> <span class="dt">usize</span> <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span> <span class="op">..</span> t<span class="op">.</span>len() <span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> t[i] <span class="op">==</span> n <span class="op">{</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span> i<span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ERROR</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Cette dernière pourrait échouer si par exemple la valeur cherchée n’est pas dans le tableau. Il faut un moyen de coder l’idée qu’il peut ou non y avoir un résultat.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> cherche_tableau_u32(t<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u32</span>]<span class="op">,</span> n<span class="op">:</span> <span class="dt">u32</span>) <span class="op">-&gt;</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span> <span class="op">..</span> t<span class="op">.</span>len() <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> t[i] <span class="op">==</span> n <span class="op">{</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span> <span class="dt">Option</span><span class="pp">::</span><span class="cn">Some</span>(i)<span class="op">;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Option</span><span class="pp">::</span><span class="cn">None</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="générique">Générique</h2>
+<p>Le type <code>Option&lt;T&gt;</code> est générique, ça signifie que l’on peut choisir le type stocké dans la variante <code>Option::Some(T)</code>, ici on a choisi <code>Option&lt;usize&gt;</code> donc on a la variante <code>Option::Some(usize)</code>.</p>
+<p>Ici c’est un cas simple de générique, mais ces derniers se couple avec d’autres mécanisme tel que les traits et ça devient vite très complexe. On va se familiariser avec petit à petit.</p>
+<h2 id="accessibilité">Accessibilité</h2>
+<p>Il n’y a pas besoins de noter <code>Option::Some</code> ou <code>Option::None</code>, on peut directement noter <code>Some</code> et <code>None</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> cherche_tableau_u32(t<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u32</span>]<span class="op">,</span> n<span class="op">:</span> <span class="dt">u32</span>) <span class="op">-&gt;</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span> <span class="op">..</span> t<span class="op">.</span>len() <span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> t[i] <span class="op">==</span> n <span class="op">{</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span> <span class="cn">Some</span>(i)<span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="cn">None</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="méthodes">Méthodes</h2>
+<p>Le type <code>Option</code> a une multitude de méthode très utiles.</p>
+<ul>
+<li>La méthode <code>unwrap</code> qui, si l’<code>Option</code> est de la variante <code>Some</code> retourne la valeur contenu dans la variante <code>Some</code>, ou qui stop le programme si la variante est <code>None</code>. C’est pratique quand on sait que l’<code>Option</code> doit être de la variante <code>Some</code>.</li>
+<li>La méthode <code>is_some</code> qui retourne <code>true</code> si l’<code>Option</code> est de la variante <code>Some</code>, et <code>false</code> sinon.</li>
+<li>La méthode <code>is_none</code> qui retourne <code>true</code> si l’<code>Option</code> est de la variante <code>None</code>, et <code>false</code> sinon.</li>
+<li>La méthode <code>map</code> qui modifie la valeur contenue s’il y en a une.</li>
+</ul>
+<p>Je t’invite à explorer la documentation pour voir toutes les possiblités.</p>
+<h2 id="opérateur">Opérateur <code>?</code></h2>
+<p>Il y a un opérateur très pratique sur les <code>Option</code>s.</p>
+<p>Imaginons une fonction qui retourne la plus petite valeur d’un tableau.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> minimum_tableau_u32(t<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u32</span>]) <span class="op">-&gt;</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> t<span class="op">.</span>len() <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="cn">None</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> min <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">1</span> <span class="op">..</span> t<span class="op">.</span>len() <span class="op">{</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> t[i] <span class="op">&lt;</span> t[min] <span class="op">{</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                min <span class="op">=</span> i<span class="op">;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        <span class="cn">Some</span>(t[min])</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On est obligé de retourner une <code>Option</code> car si le tableau est vide, il n’y a pas de minimum.</p>
+<p>Et imaginons une fonction aui retourne l’indice de la plus petite valeur d’un tableau, en utilisant <code>cherche_tableau_u32</code> et <code>minimum_tableau_u32</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> minimum_tableau_u32_i(t<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u32</span>]) <span class="op">-&gt;</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> min <span class="op">=</span> <span class="kw">match</span> minimum_tableau_u32(t) <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="cn">Some</span>(min) <span class="op">=&gt;</span> min<span class="op">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        <span class="cn">None</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="cn">None</span><span class="op">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    cherche_tableau_u32(t<span class="op">,</span> min)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On peut utiliser l’opérateur <code>?</code> pour ne pas avoir à écrire le <code>match</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> minimum_tableau_u32_i(t<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u32</span>]) <span class="op">-&gt;</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> min <span class="op">=</span> minimum_tableau_u32(t)<span class="op">?;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    cherche_tableau_u32(t<span class="op">,</span> min)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Pratique non ? Cet opérateur fera retourner <code>None</code> à la fonction si la valeur <code>Option</code> sur laquelle il est appelé est <code>None</code>.</p>
+<p>On peut encore racourcir.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> minimum_tableau_u32_i(t<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u32</span>]) <span class="op">-&gt;</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    cherche_tableau_u32(t<span class="op">,</span> minimum_tableau_u32(t)<span class="op">?</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+    </body>
+</html>

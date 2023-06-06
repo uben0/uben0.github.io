@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+46
+" class="index-link">← retour</a>
+<h1 id="self">Self</h1>
+<p>On a déjà vu dans un chapitre précédent comment déclarer des fonctions associés et des méthodes. Mais nous allons revenir sur les mots clés <code>Self</code> et <code>self</code>.</p>
+<h2 id="le-type-self">Le type <code>Self</code></h2>
+<p>Il est possible de désigner dans un block <code>impl</code> le type sur lequel s’applique l’implémentation avec le mot clé <code>Self</code>. Ce mot clé s’avère necessaire dans des situations où ce type n’est pas déterminé. Mais il est fortement conseillé de l’utiliser dès que possible, même quand son utilisation n’est pas obligatoire.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Hello<span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Hello <span class="op">{</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> new() <span class="op">-&gt;</span> Hello <span class="op">{</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> Hello<span class="op">{</span> x<span class="op">:</span> <span class="dv">0</span> <span class="op">}</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> increment(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Hello) <span class="op">{</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>x <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>En remplaçant par <code>Self</code>, cela donne:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Hello <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> new() <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> <span class="dt">Self</span><span class="op">{</span> x<span class="op">:</span> <span class="dv">0</span> <span class="op">}</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> increment(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">Self</span>) <span class="op">{</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>x <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>De cette façon, le type <code>Hello</code> n’apparait qu’une seul fois (<code>impl Hello</code>). C’est une bonne habitude à prendre.</p>
+<h2 id="mot-clé-self">Mot clé <code>self</code></h2>
+<p>Le mot clé <code>self</code> est différent, il désigne une variable lorsqu’on définit une méthode. Cette variable représente la valeur sur laquelle s’applique la méthode.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Hello <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> increment(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">Self</span>) <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>x <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>De cette façon, on peut appeler <code>increment</code> comme une méthode de <code>Hello</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="kw">mut</span> hello <span class="op">=</span> <span class="pp">Hello::</span>new()<span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>hello<span class="op">.</span>increment()<span class="op">;</span></span></code></pre></div>
+<p>Ce qui est équivalent à:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="kw">mut</span> hello <span class="op">=</span> <span class="pp">Hello::</span>new()<span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="pp">Hello::</span>increment(<span class="op">&amp;</span><span class="kw">mut</span> hello)<span class="op">;</span></span></code></pre></div>
+<p>Tu remarqueras que dans le cas de la notation avec le <code>.</code> nous n’avons pas eu besoins d’emprunter explicitement <code>hello</code>. Si on devait explicitement l’emprunter, cela donnerait:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>(<span class="op">&amp;</span><span class="kw">mut</span> hello)<span class="op">.</span>increment()<span class="op">;</span></span></code></pre></div>
+<h3 id="contraction">Contraction</h3>
+<p>Il est possible de contracter la notation avec <code>self</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Hello <span class="op">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> increment(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span>) <span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>x <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th>long</th>
+<th>court</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>self: Self</code></td>
+<td><code>self</code></td>
+</tr>
+<tr class="even">
+<td><code>self: &amp;Self</code></td>
+<td><code>&amp;self</code></td>
+</tr>
+<tr class="odd">
+<td><code>self: &amp;mut Self</code></td>
+<td><code>&amp;mut self</code></td>
+</tr>
+</tbody>
+</table>
+<p>Et oui, quand on est programmeur on est fainéant, si on peut gagner quelques charactères, c’est toujours bon à prendre (et puis ça améliore la lisibilité).</p>
+<p>Même ci les deux notaions sont équivalentes, il est fortement recomandé de n’utiliser que la notation contractée.</p>
+    </body>
+</html>

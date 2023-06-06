@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+32
+" class="index-link">← retour</a>
+<h1 id="alias-de-type">Alias de type</h1>
+<p>On peut définir un alias pour un type choisi.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> Point <span class="op">=</span> (<span class="dt">f64</span><span class="op">,</span> <span class="dt">f64</span>)<span class="op">;</span></span></code></pre></div>
+<p>C’est seulement un alias, ça ne définit pas un nouveau type comme on le ferait avec le mot clé <code>struct</code>. Ici, <code>Point</code> et <code>(f64, f64)</code> sont interchangeables :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> p1<span class="op">:</span> Point <span class="op">=</span> (<span class="dv">0.0</span><span class="op">,</span> <span class="dv">3.0</span>)<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> p2<span class="op">:</span> (<span class="dt">f64</span><span class="op">,</span> <span class="dt">f64</span>) <span class="op">=</span> (<span class="dv">1.0</span><span class="op">,</span> <span class="op">-</span><span class="dv">2.0</span>)<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> (x1<span class="op">,</span> y1) <span class="op">=</span> p1<span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> (x2<span class="op">,</span> y2) <span class="op">=</span> p2<span class="op">;</span></span></code></pre></div>
+<p>Tous les types peuvent être aliassés, sans exception.</p>
+    </body>
+</html>

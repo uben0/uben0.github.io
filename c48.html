@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+48
+" class="index-link">← retour</a>
+<h1 id="jeu-déchecs-8">Jeu d’échecs (8)</h1>
+<p>Améliorons le code de notre projet.</p>
+<h2 id="self">Self</h2>
+<p>Appliquons ce que nous avons appris avec les mots clé <code>Self</code> et <code>self</code> (voir chapitre précédent).</p>
+<h2 id="itérateur-de-pièce">Itérateur de pièce</h2>
+<p>On se retrouve souvent à itérer sur les pièces du plateau. On va créer un itérateur sur les pièces du plateau.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> BoardIter<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    board<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> [[<span class="dt">Option</span><span class="op">&lt;</span>Piece<span class="op">&gt;;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]<span class="op">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    y<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span><span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;</span> <span class="bu">Iterator</span> <span class="kw">for</span> BoardIter<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">type</span> Item <span class="op">=</span> (<span class="dt">usize</span><span class="op">,</span> <span class="dt">usize</span><span class="op">,</span> Piece)<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> next(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span>) <span class="op">-&gt;</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">Self</span><span class="pp">::</span>Item<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">loop</span> <span class="op">{</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>            <span class="co">// si on est à la fin</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>y <span class="op">==</span> <span class="dv">8</span> <span class="op">{</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                <span class="kw">return</span> <span class="cn">None</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>            <span class="co">// on garde de coté les coordonnés actuelle</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> (x<span class="op">,</span> y) <span class="op">=</span> (<span class="kw">self</span><span class="op">.</span>x<span class="op">,</span> <span class="kw">self</span><span class="op">.</span>y)<span class="op">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>            <span class="co">// on avance d&#39;un pas</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>x <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>            <span class="co">// si on est en fin de ligne</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>x <span class="op">==</span> <span class="dv">8</span> <span class="op">{</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>                <span class="co">// sauter une ligne</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>y <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>                <span class="co">// revenir à la première colone</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>            <span class="co">// si il y a une pièce</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(p) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>                <span class="kw">return</span> <span class="cn">Some</span>((x<span class="op">,</span> y<span class="op">,</span> p))</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Créons une méthode <code>pieces</code> de <code>Game</code> qui renvoie cette itérateur.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> pieces(<span class="op">&amp;</span><span class="kw">self</span>) <span class="op">-&gt;</span> BoardIter <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    BoardIter<span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        board<span class="op">:</span> <span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>board<span class="op">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        x<span class="op">:</span> <span class="dv">0</span><span class="op">,</span> y<span class="op">:</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On peut simplifier toutes les fonctions qui itère sur les pièces du plateau. Comme <code>is_in_check</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> is_in_check(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> player<span class="op">:</span> Color) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> map <span class="op">=</span> [[<span class="cn">false</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> oponent <span class="op">=</span> <span class="kw">match</span> player <span class="op">{</span>Black<span class="op">=&gt;</span>White<span class="op">,</span> White<span class="op">=&gt;</span>Black<span class="op">};</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">.</span>reachable_by_player(oponent<span class="op">,</span> <span class="op">&amp;</span><span class="kw">mut</span> map)<span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">8</span> <span class="op">{</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">8</span> <span class="op">{</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> map[y][x] <span class="op">&amp;&amp;</span> piece<span class="op">.</span>c <span class="op">==</span> player <span class="op">&amp;&amp;</span> piece<span class="op">.</span>t <span class="op">==</span> King <span class="op">{</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">return</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="cn">false</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Qui devient:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> is_in_check(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> player<span class="op">:</span> Color) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> map <span class="op">=</span> [[<span class="cn">false</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> oponent <span class="op">=</span> <span class="kw">match</span> player <span class="op">{</span>Black<span class="op">=&gt;</span>White<span class="op">,</span> White<span class="op">=&gt;</span>Black<span class="op">};</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">.</span>reachable_by_player(oponent<span class="op">,</span> <span class="op">&amp;</span><span class="kw">mut</span> map)<span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> (x<span class="op">,</span> y<span class="op">,</span> piece) <span class="kw">in</span> <span class="kw">self</span><span class="op">.</span>pieces() <span class="op">{</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> map[y][x] <span class="op">&amp;&amp;</span> piece<span class="op">.</span>c <span class="op">==</span> player <span class="op">&amp;&amp;</span> piece<span class="op">.</span>t <span class="op">==</span> King <span class="op">{</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="cn">false</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On peut même faire mieux en utilisant la méthode <code>any</code> d’un itérateur.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> is_in_check(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> player<span class="op">:</span> Color) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> map <span class="op">=</span> [[<span class="cn">false</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> oponent <span class="op">=</span> <span class="kw">match</span> player <span class="op">{</span>Black<span class="op">=&gt;</span>White<span class="op">,</span> White<span class="op">=&gt;</span>Black<span class="op">};</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">.</span>reachable_by_player(oponent<span class="op">,</span> <span class="op">&amp;</span><span class="kw">mut</span> map)<span class="op">;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">.</span>pieces()<span class="op">.</span>any(<span class="op">|</span>(x<span class="op">,</span> y<span class="op">,</span> p)<span class="op">|</span> map[y][x] <span class="op">&amp;&amp;</span> p<span class="op">.</span>c <span class="op">==</span> player <span class="op">&amp;&amp;</span> p<span class="op">.</span>t <span class="op">==</span> King)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="coordonnés">Coordonnés</h2>
+<p>Modifions la méthode <code>print</code> de <code>Game</code> de sorte qu’elle affiche les coordonnés des cases.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> print(<span class="op">&amp;</span><span class="kw">self</span>) <span class="op">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="pp">println!</span>(<span class="st">&quot;  a b c d e f g h&quot;</span>)<span class="op">;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">8</span> <span class="op">{</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="pp">print!</span>(<span class="st">&quot;{} &quot;</span><span class="op">,</span> y <span class="op">+</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">8</span> <span class="op">{</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            <span class="kw">match</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                <span class="cn">Some</span>(piece) <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                    <span class="pp">print!</span>(<span class="st">&quot;{} &quot;</span><span class="op">,</span> piece<span class="op">.</span>to_unicode())<span class="op">;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                <span class="cn">None</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                    <span class="pp">print!</span>(<span class="st">&quot;  &quot;</span>)<span class="op">;</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot; {}&quot;</span><span class="op">,</span> y <span class="op">+</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="pp">println!</span>(<span class="st">&quot;  a b c d e f g h&quot;</span>)<span class="op">;</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="progression">Progression</h2>
+<p>Retrouves dans le fichier <a href="https://gitlab.com/uben0/rust-tutoriel-fr/-/raw/master/48/main.rs"><code>main.rs</code></a> le projet.</p>
+    </body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+10
+" class="index-link">← retour</a>
+<h1 id="jeu-du-nombre-mystère">Jeu du nombre mystère</h1>
+<p>Tu vas coder ton premier jeu en Rust, il s’agira du <strong>Nombre mystère</strong>. Un nombre mystère est choisi entre <code>0</code> et <code>99</code> inclu et tu dois le deviner. Tu as <code>10</code> essais, à chaque fois, il est indiqué si le nombre que tu as entré est plus petit ou plus grand que le nombre mystère.</p>
+<p>Exemple :</p>
+<pre><code>Le nombre mystère a été choisi. Devine-le !
+
+Ta réponse :
+40
+Le nombre mystère est plus petit que 40.
+
+Ta réponse :
+10
+Le nombre mystère est plus grand que 10.
+
+Ta réponse :
+25
+Le nombre mystère est plus grand que 25.
+
+Ta réponse :
+32
+Bravo, tu as deviné le nombre mystère !</code></pre>
+<p>Tu as tous les outils en mains pour réaliser ce jeu, sauf un, celui qui te permet de choisir un nombre aléatoir.</p>
+<h2 id="générer-un-nombre-aléatoir">Générer un nombre aléatoir</h2>
+<p>Le plus simple est de générer un entier aléatoir.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> random_integer<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> <span class="pp">rand::</span>random()<span class="op">;</span></span></code></pre></div>
+<p>Et de le ramener à un interval avec un modulo.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> mystere<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> random_integer <span class="op">%</span> <span class="dv">100</span><span class="op">;</span></span></code></pre></div>
+<p>La variable <code>random_integer</code> peut avoir n’importe quelle valeur d’un entier <code>u32</code> (de <code>0</code> à <code>4294967295</code>), grâce au modulo <code>% 100</code>, on s’assure que la variable <code>mystere</code> soit comprise entre <code>0</code> et <code>99</code> inclu.</p>
+<h1 id="correction">Correction</h1>
+<p>Une correction se trouve dans le fichier <a href="https://gitlab.com/uben0/rust-tutoriel-fr/-/raw/master/10/correction.rs"><code>correction.rs</code></a>.</p>
+    </body>
+</html>

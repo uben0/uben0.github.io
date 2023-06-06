@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+23
+" class="index-link">← retour</a>
+<h1 id="les-énumérations">Les énumérations</h1>
+<p>Imaginons que l’on veuille stocker les jours de la semaines. On pourrait simplement utiliser un entier <code>u8</code> avec les valeurs <code>0</code>, <code>1</code>, <code>2</code>, <code>3</code>, <code>4</code>, <code>5</code> et <code>6</code> associés aux jours de la semaine. Mais cette façon de faire comporte des désavantages, par exmple, on pourrait se tromper et rentrer une valeur qui n’aurait pas de sens comme <code>7</code> ou n’importe quelle autre valeur n’étant pas comprise entre <code>0</code> et <code>6</code> inclu.</p>
+<p>Heuresement, il y a les énumérations. Créons-en une pour les jours de la semaine:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="bu">Copy</span><span class="at">)]</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> JourSemaine <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    Lundi<span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    Mardi<span class="op">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    Mercredi<span class="op">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    Jeudi<span class="op">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    Vendredi<span class="op">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    Samedi<span class="op">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    Dimanche<span class="op">,</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Déclarons une variable de ce type et affichons la:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> jour<span class="op">:</span> JourSemaine <span class="op">=</span> <span class="pp">JourSemaine::</span>Mercredi<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> jour)<span class="op">;</span></span></code></pre></div>
+<pre><code>Mercredi</code></pre>
+<h2 id="stocker-des-valeurs">Stocker des valeurs</h2>
+<p>On peut stocker des valeurs en fonction de la variante de l’énumération:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="bu">Copy</span><span class="at">)]</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> Event <span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    Quit<span class="op">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    Click (<span class="dt">i32</span><span class="op">,</span> <span class="dt">i32</span>)<span class="op">,</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    KeyBoard <span class="op">{</span> key<span class="op">:</span> <span class="dt">char</span><span class="op">,</span> shift<span class="op">:</span> <span class="dt">bool</span> <span class="op">},</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On peut imaginer une fonction renvoyant des événements se produisant sur une fenêtre :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> wait_next_event() <span class="op">-&gt;</span> Event<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> event<span class="op">:</span> Event <span class="op">=</span> wait_next_event()<span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> event)<span class="op">;</span></span></code></pre></div>
+<pre><code>Click(128, 87)</code></pre>
+<h2 id="une-variante-une-structre">Une variante, une structre</h2>
+<p>En fait, chaque variante d’une énumération est une structure. Quand on n’associe aucune valeur à une variante (comme les jours de la semaine), ce sont des structures vides (et oui, elles ont leur utilité).</p>
+<h2 id="plus-à-savoir">Plus à savoir</h2>
+<p>Les énumérations sont très pratiques, mais là où on en est, nous n’avons pas les outils pour exploiter leur plein potentiel.</p>
+    </body>
+</html>

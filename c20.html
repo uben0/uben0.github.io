@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+20
+" class="index-link">← retour</a>
+<h1 id="slices">Slices</h1>
+<p>Imaginons une fonction affichant le contenu d’un tableau de <code>i32</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> affiche_tableau_i32(tableau<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">i32</span><span class="op">;</span> <span class="dv">10</span>]) <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">10</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;{} -&gt; {}&quot;</span><span class="op">,</span> i<span class="op">,</span> tableau[i])<span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Le type de <code>tableau</code> est <code>&amp;[i32; 10]</code>, ce qui signifie que c’est une référence sur un tableau de 10 entiers, mais ce n’est pas pratique puisque ça signifie qu’on ne peut lui passer que des tableaus de taille <code>10</code>. Heuresement il y a une solution:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> affiche_tableau_i32(tableau<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">i32</span>]) <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span>tableau<span class="op">.</span>len() <span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;{} -&gt; {}&quot;</span><span class="op">,</span> i<span class="op">,</span> tableau[i])<span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Le type <code>[i32]</code> est un tableau de <code>i32</code> dont la taille n’est pas connu. Il n’est pas possible de déclarer une variable dont le type n’a pas une taille connu, car une variable vit sur la pile et pour ça, sa taille doit être connu.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> t<span class="op">:</span> [<span class="dt">i32</span>] <span class="op">=</span> [<span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">5</span>][<span class="op">..</span>]<span class="op">;</span> <span class="co">// ERROR</span></span></code></pre></div>
+<p>(la notation <code>[..]</code> permet ici de convertir <code>[i32; 3]</code> en <code>[i32]</code>, on reviendra après sur cette notation)</p>
+<p>En revanche, une référence (étant une adresse mémoire) a une taille connu, et rien n’oblige une valeur pointée par une référence à avoir une taille connu.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> t<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">i32</span>] <span class="op">=</span> <span class="op">&amp;</span>[<span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">5</span>][<span class="op">..</span>]<span class="op">;</span> <span class="co">// OK</span></span></code></pre></div>
+<h2 id="pointeur-lourd">Pointeur lourd</h2>
+<p>Pour mieux comprendre ce qui se passe, imaginons la fonction <code>affiche_tableau_i32</code> en C.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> affiche_tableau_int<span class="op">(</span><span class="dt">int</span><span class="op">*</span> tableau<span class="op">,</span> <span class="dt">size_t</span> taille<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> taille<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> -&gt; </span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> tableau<span class="op">[</span>i<span class="op">]);</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>En C, on a besoins d’un pointeur au début du tableau, et de sa taille.</p>
+<p>En Rust, c’est exactement ce que contient <code>&amp;[i32]</code>, l’adresse mémoire qui pointe au début du tableau et sa taille, c’est ce qu’on appelle un pointeur lourd. On dit d’une référence que c’est un pointeur lourd lorsqu’elle contient plus qu’une adresse mémoire. On verra qu’il y a d’autres cas où des références sont en fait des pointeurs lourds.</p>
+<pre><code>poiteur lourd         tableau d&#39;entiers en mémoire
+▄┏━━━━━━━━━┓          ┌───┬───┬───┬───┬───┬───┐
+█┃ 0x7f004 ┣━╺╺╺╺╺╺╺╺◆│ 8 │ 0 │ 6 │ 2 │ 9 │ 3 │
+█┡━━━━━━━━━┩          └───┴───┴───┴───┴───┴───┘
+█│       6 │ taille
+▀└─────────┘</code></pre>
+<p>On appelle notre fonction de la façon suivante:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> tableau<span class="op">:</span> [<span class="dt">i32</span><span class="op">;</span> <span class="dv">6</span>] <span class="op">=</span> [<span class="dv">3</span><span class="op">,</span> <span class="dv">6</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">7</span>]<span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>affiche_tableau(<span class="op">&amp;</span>tableau)<span class="op">;</span></span></code></pre></div>
+<p>On lui passe le type <code>&amp;[i32; 6]</code> et la conversion est automatique vers le type <code>&amp;[i32]</code>, pas besoins de la notation <code>[..]</code>. C’est un très rare cas de conversion implicite.</p>
+<p>Un tableau dont la taille n’est pas connu est appelé une <code>slice</code> (tranche).</p>
+<h2 id="sélectionner">Sélectionner</h2>
+<p>On a vu la notation <code>[..]</code>, cette dernière permet de sélectionner tout le tableau. Mais on peu par exemple sélectionner les <code>10</code> premiers éléments avec <code>[..10]</code>, ou encore tous le éléments sauf les <code>3</code> premiers avec <code>[3..]</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> t <span class="op">=</span> [<span class="dv">6</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">6</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">8</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> <span class="op">&amp;</span>t[<span class="op">..</span>])<span class="op">;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> <span class="op">&amp;</span>t[<span class="op">..</span><span class="dv">5</span>])<span class="op">;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> <span class="op">&amp;</span>t[<span class="dv">5</span><span class="op">..</span>])<span class="op">;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> <span class="op">&amp;</span>t[<span class="dv">3</span><span class="op">..</span><span class="dv">7</span>])<span class="op">;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> n <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> <span class="op">&amp;</span>t[<span class="op">..</span>n])<span class="op">;</span></span></code></pre></div>
+<pre><code>[6, 1, 0, 4, 6, 2, 8, 3]
+[6, 1, 0, 4, 6]
+[2, 8, 3]
+[4, 6, 2, 8]
+[6, 1, 0, 4]</code></pre>
+    </body>
+</html>

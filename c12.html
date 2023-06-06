@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+12
+" class="index-link">← retour</a>
+<h1 id="déduction-du-type">Déduction du type</h1>
+<p>Il n’est pas nécessaire de préciser un type si ce denier peut être déduit du context.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b <span class="op">=</span> a<span class="op">;</span></span></code></pre></div>
+<p>Ici, <code>b</code> est de type <code>i32</code> car <code>a</code> est de type <code>i32</code>. Par ailleur, si on indiquait que <code>b</code> était de type <code>u32</code>, cela provoquerai une erreur, rappels-toi, en Rust, on ne mélange pas les types, contrairement au C où des conversions se font implicitement.</p>
+<h2 id="type-sur-literal">Type sur literal</h2>
+<p>On peut indiquer le type sur un literal :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">4i32</span><span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> <span class="dv">6u32</span><span class="op">;</span></span></code></pre></div>
+<p>Donc, on peu racourcir:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a <span class="op">=</span> <span class="dv">4i32</span><span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b <span class="op">=</span> <span class="dv">6u32</span><span class="op">;</span></span></code></pre></div>
+<h2 id="type-par-défaut">Type par défaut</h2>
+<p>Si aucun type ne peut être induit sur un literal, alors il existe un type par défaut, <code>i32</code> pour les entiers et <code>f64</code> pour les décimaux.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a <span class="op">=</span> <span class="dv">4</span><span class="op">;</span>    <span class="co">// i32</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b <span class="op">=</span> <span class="dv">6.0</span><span class="op">;</span>  <span class="co">// f64</span></span></code></pre></div>
+<h2 id="autres-types">Autres types</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> c <span class="op">=</span> <span class="ch">&#39;あ&#39;</span><span class="op">;</span>       <span class="co">// char</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b <span class="op">=</span> <span class="cn">true</span><span class="op">;</span>       <span class="co">// bool</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> t <span class="op">=</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">7</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">;</span>  <span class="co">// [i32; 3]</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> s <span class="op">=</span> <span class="st">&quot;hello&quot;</span><span class="op">;</span>    <span class="co">// &amp;str</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> v <span class="op">=</span> (<span class="cn">true</span><span class="op">,</span> <span class="dv">9</span>)<span class="op">;</span>  <span class="co">// (bool, i32)</span></span></code></pre></div>
+    </body>
+</html>

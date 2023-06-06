@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+40
+" class="index-link">← retour</a>
+<h1 id="à-qui-appartient-quoi">À qui appartient quoi ?</h1>
+<p>En Rust, il n’y a jamais d’ambiguïté quant à l’apartenance d’une valeur.</p>
+<p>Prennons la fonction C <code>ctime</code> de <code>"time.h"</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>ctime<span class="op">(</span><span class="at">const</span> <span class="dt">time_t</span> <span class="op">*</span>timep<span class="op">);</span></span></code></pre></div>
+<p>Cette fonction retourne un pointeur sur une chaîne de caractère. Sans la documentation, il est impossible de savoir si l’on possède la chaîne retournée, ou si elle nous est juste prétée.</p>
+<p>Si l’on possède cette chaîne, on est responsable de son allocation, donc de la libérer (appeler <code>free()</code>) quand on en a plus besoins. Si cette chaîne est prétée, on ne la possède pas, on ne doit pas la désallouer.</p>
+<p>Essaye de trouver la documentation et de savoir si <code>ctime</code> passe ou prête la chaîne de caractère. Est-ce facile à trouver ?</p>
+<h2 id="règles-dappartenance">Règles d’appartenance</h2>
+<p>En Rust, en regardant le type d’une valeur, on peut déterminer dans quelle mesure elle nous appartient.</p>
+<table>
+<thead>
+<tr class="header">
+<th>type</th>
+<th style="text-align: center;">lecture</th>
+<th style="text-align: center;">écriture</th>
+<th style="text-align: center;">prenable</th>
+<th>on dit que</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>T</code></td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>on possède <code>T</code></td>
+</tr>
+<tr class="even">
+<td><code>&amp;T</code></td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td>on emprunte <code>T</code> en lecture seule</td>
+</tr>
+<tr class="odd">
+<td><code>&amp;mut T</code></td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;"></td>
+<td>on emprunte <code>T</code> en lecture et écriture</td>
+</tr>
+</tbody>
+</table>
+<h2 id="exemple">Exemple</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Data <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    a<span class="op">:</span> <span class="dt">i32</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    b<span class="op">:</span> <span class="dt">u32</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    c<span class="op">:</span> <span class="dt">char</span><span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> take(v<span class="op">:</span> Data) <span class="op">{}</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> borrow(v<span class="op">:</span> <span class="op">&amp;</span>Data) <span class="op">{}</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> borrow_mut(v<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Data) <span class="op">{}</span></span></code></pre></div>
+<p>Ces trois fonctions ne sont pas autorisées à disposer de la valeur de type <code>Data</code> de la même façon.</p>
+<ul>
+<li><code>take</code> possède la valeur, elle a tous les droits, elle peut même la déplacer ou la détruire.</li>
+<li><code>borrow</code> emprunte la valeur en lecture seul, elle peut la lire et la préter en lecture seule à son tour autant qu’elle veut.</li>
+<li><code>borrow_mut</code> emprunte la valeur en lecture et écriture, elle peut la lire et la modifier, la préter en lecture seule ou avec écriture autant qu’elle veut.</li>
+</ul>
+<h2 id="emprunter-ou-posseder">Emprunter ou posseder</h2>
+<p>Pour comprendre les règles fixées par le langage Rust on peut utiliser une analogie avec le pret d’un livre.</p>
+<p>Si tu possèdes un livre, alors tu es libre de le lire, d’écrire dessus, de le préter ou de le donner à quelqu’un, ou encore de le dértuire.</p>
+<p>Si on t’a prété un livre, tu devra le rendre tel qu’on te l’a passé, donc tu peux le lire et le préter autant que tu veux sous la seule condition qu’on te le retourne intact pour que tu puisse le retourner intact.</p>
+<p>Si on t’as prété un livre mais qu’on t’as autorisé à écrire dedans alors tu peut tout à fait si tu le désire le préter autant que tu veux en autorisant qu’on écrive dedans, mais il faudra qu’on te le rende pour pouvoir le rendre.</p>
+<p>Si tu donnes un livre, alors il ne t’appartient plus, tu ne peux plus le lire ou écrire dedans, tu ne peux bien sûre plus le préter. Il n’est plus à toi.</p>
+<p>Si tu prète un livre à quelqu’un, alors tu n’y a plus accès tant qu’il ne te le rend pas.</p>
+<p>Cependant, on peut partager un livre, c’est à dire le préter mais n’autoriser que la lecture, comme ça on peut être plusieur à le lire en même temps.</p>
+<p>Pour les valeurs en Rust, c’est pareil. Ces règles garantissent l’intégrité des données. Elles peuvent être contraignantes mais ce qu’elles garantissent est très précieux. C’est le compilateur qui s’assure qu’elles sont bien respectées.</p>
+<h2 id="duré-de-vie">Duré de vie</h2>
+<p>Si un livre a une duré de vie, alors il ne peut pas être emprunté plus longtemps que cette duré de vie.</p>
+<p>C’est pareil avec les valeur en Rust.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> ref_of_dead_value() <span class="op">-&gt;</span> <span class="op">&amp;</span><span class="dt">i32</span> <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> d <span class="op">=</span> <span class="dv">42</span><span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> <span class="op">&amp;</span>d<span class="op">;</span> <span class="co">// ERROR</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Ici, on essai de préter <code>d</code> à l’appelant alors que <code>d</code> meurt lorsque la fonction se finit (c’est une variable locale). Et le compilateur va le voir. Ici, c’est évident qu’il y a un problème, mais peu importe l’agencement du code, ou sa complixité, le compilateur est garantie de détecter si une durée de vie n’est pas respectée.</p>
+<h2 id="duré-de-vie-explicite">Duré de vie explicite</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> RefData <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    ref_data<span class="op">:</span> <span class="op">&amp;</span><span class="dt">i32</span><span class="op">,</span> <span class="co">// ERROR</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Si on imagine une structure qui stocke une référence vers une valeur de type <code>i32</code>, alors le compilateur se pleins qu’on ne spécifie pas la durée de vie de la valeur référés par <code>ref_data</code>. Pour corriger le problème, il faut que notre structure <code>RefData</code> soit générique sur une duré de vie. Ça parait un peu complexe et étrange mais en pratiquant un peu on se rend vite compte que ce n’est pas sorcier.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> RefData<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    ref_data<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> <span class="dt">i32</span><span class="op">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> d <span class="op">=</span> <span class="dv">42</span><span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> ref_d <span class="op">=</span> RefData<span class="op">{</span>ref_data<span class="op">:</span> <span class="op">&amp;</span>d<span class="op">};</span></span></code></pre></div>
+<h2 id="ambiguïté">Ambiguïté</h2>
+<p>À chaque fois qu’il y a une référence, il y a une duré de vie qui est calculée. Pourtant, on a utilisé des références avant et on a jamais eu à préciser la duré de vie. Tant qu’il n’y a pas d’ambiguïté sur la duré de vie de la valeur référée, il n’y a pas besoins de la spécifier.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> print_msg(msg<span class="op">:</span> <span class="op">&amp;</span><span class="dt">String</span>) <span class="op">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="pp">println!</span>(<span class="st">&quot;{}&quot;</span><span class="op">,</span> msg)<span class="op">;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Ici, on sait pour sûre que la référence vie moins longtemps que la valeur référée. la référence ne vie que durant l’exécution de la fonction, alors que la valeur référé n’a pas le droit d’être détruite tant qu’elle est prétée.</p>
+<h3 id="ambigu">Ambigu</h3>
+<p>Imaginons une fonction qui concatenne deux chaînes de caractères, et qui retourne au passage une référence sur celle contenant le résultat.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> append(s1<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">String</span><span class="op">,</span> s2<span class="op">:</span> <span class="op">&amp;</span><span class="dt">String</span>) <span class="op">-&gt;</span> <span class="op">&amp;</span><span class="dt">String</span> <span class="co">// ERROR</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    s1<span class="op">.</span>push_str(s2)<span class="op">;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> s1<span class="op">;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>En ne se fiant qu’au prototype, on ne sait pas quelle est la duré de vie de la valeur référée par la référence retournée. En regardant le corps de la fonction, on peut voir que c’est celle de <code>s1</code>. Mais il faut le spécifier explicitement.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> append<span class="op">&lt;</span><span class="ot">&#39;a</span><span class="op">&gt;</span>(s1<span class="op">:</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> <span class="kw">mut</span> <span class="dt">String</span><span class="op">,</span> s2<span class="op">:</span> <span class="op">&amp;</span><span class="dt">String</span>) <span class="op">-&gt;</span> <span class="op">&amp;</span><span class="ot">&#39;a</span> <span class="dt">String</span> <span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    s1<span class="op">.</span>push_str(s2)<span class="op">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> s1<span class="op">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Maintenant, juste en regardant le prototype, il n’y a plus d’ambiguïté.</p>
+<h3 id="non-ambigu">Non ambigu</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> append_hello(msg<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">String</span>) <span class="op">-&gt;</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">String</span> <span class="op">{</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    msg<span class="op">.</span>push_str(<span class="st">&quot;hello&quot;</span>)<span class="op">;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> msg<span class="op">;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Ce cas est est considéré comme non ambigu car on considère que quand une seule référence est passée en paramètre, alors celle renvoyée a la même duré de vie.</p>
+<h2 id="dispute-avec-le-compilateur">Dispute avec le compilateur</h2>
+<p>Les règles d’appartenance et de duré de vie sont les plus difficiles à respecter. Il y a tout à parier que tu vas t’arracher les cheveux en n’arrivant pas à satisfaire le compilateur sur une de ces règles. Il est important de prendre le temps de lire ce que répond le compilateur, car il ne se contente pas de reffuser, mais il donne aussi des expliquations détaillées de pourquoi il reffuse et t’aiguille sur les sollutions possibles.</p>
+<h3 id="problème-incontournable">Problème incontournable</h3>
+<p>Souvent, quand le compilateur se pleins que tu enfreins une règles d’appartenance ou de duré de vie, il est impossible de contourner le problème, ce n’est pas ce que tu fais qui n’est pas correcte, mais la façon de faire. Ça demande de revoir le modèle de son code. Souvent, ces règles nous force à adopter un style de programmation proche du fonctionnel.</p>
+<h3 id="problème-contournable">Problème contournable</h3>
+<p>Heursement, il est possible, dans une certaine mesure, de s’affranchir des règles d’appartenance et de duré de vie, pas directement, mais indirectement en utilisant des outils de la bibliothèque standard (ou de bibliothèques tiers). Ce sera le sujet d’un prochain chapitre.</p>
+    </body>
+</html>

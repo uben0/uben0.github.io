@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+15
+" class="index-link">← retour</a>
+<h1 id="tri-de-tableau">Tri de tableau</h1>
+<p>Coder un algorithme de tri est une bonne façon de se familiariser avec un langage de programmation.</p>
+<h2 id="valeurs-aléatoires">Valeurs aléatoires</h2>
+<p>Pour remplir notre tableau de valeurs aléatoires, on doit dans un premier temps le déclarer avec une valeur initiale, puis itérer sur chaque emplacement pour y affecter une valeur aléatoire :</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="kw">mut</span> tableau<span class="op">:</span> [<span class="dt">u32</span><span class="op">;</span> <span class="dv">10</span>] <span class="op">=</span> [<span class="dv">0</span><span class="op">;</span> <span class="dv">10</span>]<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">10</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> aleatoir<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> <span class="pp">rand::</span>random()<span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    tableau[i] <span class="op">=</span> aleatoir <span class="op">%</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Notez l’utilisation du mot clé <code>mut</code> pour <code>tableau</code> étant donné qu’il est modifié dans la boucle.</p>
+<h2 id="algorithme-de-tri">Algorithme de tri</h2>
+<p>Maintenant, écrit un algorithme de tri de tableau, tu as tous les outils en mains. Tu peux trouver un algorihtme par toi même, mais si tu as du mal, je te conseil le tri par sélection (<a class="link" href="https://fr.wikipedia.org/wiki/Tri_par_s%C3%A9lection">lien wikipedia: tri sélection</a>).</p>
+<p>Tu peut échanger deux valeurs d’un tableau de cette façon :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="kw">mut</span> tableau <span class="op">=</span> [<span class="dv">7</span><span class="op">,</span> <span class="dv">8</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">6</span>]<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">// on veut échanger le 7 et le 3</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> temporaire <span class="op">=</span> tableau[<span class="dv">0</span>]<span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>tableau[<span class="dv">0</span>] <span class="op">=</span> tableau[<span class="dv">2</span>]<span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>tableau[<span class="dv">2</span>] <span class="op">=</span> temporaire<span class="op">;</span></span></code></pre></div>
+<h1 id="correction">Correction</h1>
+<p>Une correction se trouve dans le fichier <a href="https://gitlab.com/uben0/rust-tutoriel-fr/-/raw/master/15/correction.rs"><code>correction.rs</code></a>.</p>
+    </body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+25
+" class="index-link">← retour</a>
+<h1 id="la-bibliothèque-standard">La bibliothèque standard</h1>
+<p>La bibliothèque standard est un ensemble de types, fonctions et traits fournits de base avec le langage.</p>
+<h2 id="module">Module</h2>
+<p>Elle est organisée par <code>mod</code>ules, un <code>mod</code>ule est comme un dossier:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">mod</span> un_dossier <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> une_fonction() <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;Salut!&quot;</span>)<span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On accède à ses éléments grâce à son nom suivit du séparateur <code>::</code></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">un_dossier::</span>une_fontcion()<span class="op">;</span></span></code></pre></div>
+<p>On peut imbriquer des <code>mod</code>ules, y déclarer des fonctions avec le même nom sans les mélanger:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">mod</span> a <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> une_fonction() <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;Bonjour&quot;</span>)<span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">mod</span> b <span class="op">{</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">fn</span> une_fonction() <span class="op">{</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>            <span class="pp">println!</span>(<span class="st">&quot;Aurevoir&quot;</span>)<span class="op">;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">mod</span> b <span class="op">{</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> une_fonction() <span class="op">{</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;Bonsoir&quot;</span>)<span class="op">;</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="pp">a::</span>une_fonction()<span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="pp">a::b::</span>une_fonction()<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="pp">b::</span>une_fonction()<span class="op">;</span></span></code></pre></div>
+<pre><code>Bonjour
+Aurevoir
+Bonsoir</code></pre>
+<h2 id="le-module-std">Le module <code>std::</code></h2>
+<p>Le <code>mod</code>ule <code>std::</code> contient la bibliothèque standard. On peut accéder à sa documentation en éxécutant la commande:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rustup</span> doc <span class="at">--std</span></span></code></pre></div>
+<p>Cependant, beaucoup des types ou traits de la bibliothèque standard sont rendus directement accessibles sans avoir à spécifier leur chemin, par exemple, on peut utiliser <code>Option</code> sans avoir à indiquer <code>std::option::Option</code>.</p>
+<h2 id="mot-clé-use">Mot clé <code>use</code></h2>
+<p>Il est possible de rendre directement accessible un élément voulu grâce au mot clé <code>use</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">a::b::</span>une_fonction<span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>une_fontion()<span class="op">;</span></span></code></pre></div>
+<h2 id="cest-standard-cest-bien">C’est standard, c’est bien</h2>
+<p>La bibliothèque standard défini une multitudes de types, de fonctions et de traits très utiles. Le mieux est de découvrir au fur et à mesure différents éléments de cette dernière. Ce chapitre est là surtout pour bien faire comprendre que la bibliothèque standard est omniprésente, à titre d’exemple, on a utilisé la fonction <code>f64::sqrt()</code> qui est définit dans la bibliothèque standard. Il y a aussi <code>print</code> et <code>println</code>.</p>
+<h2 id="générique">Générique</h2>
+<p>Tu veras beaucoup de types, fonctions et traits génériques. Un type est générique quand il utilise un ou plusieurs types qu’il ne connait pas encore. Les génériques sont notés avec <code>&lt;T, U, ...&gt;</code> comme <code>Option&lt;T&gt;</code>. Je reviendrais sur les génériques plus tard.</p>
+    </body>
+</html>

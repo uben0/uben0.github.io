@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+27
+" class="index-link">← retour</a>
+<h1 id="les-paternes">Les paternes</h1>
+<p>Les paternes sont très importants, ils permettent notament d’utiliser correctement les tuples et rendent possible un embranchement appelé <code>match</code> qui est très pratique.</p>
+<p>Tu as utilisé des paternes sans le savoir, par exemple lors d’une déclaration de variable.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code></pre></div>
+<p>Le <code>a</code> est un paterne, très basic certe, mais un paterne quand même, voyons un autre exemple.</p>
+<h2 id="paterne-tuple">Paterne tuple</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> v <span class="op">=</span> (<span class="dv">345</span><span class="op">,</span> <span class="cn">true</span><span class="op">,</span> <span class="ch">&#39;a&#39;</span>)<span class="op">;</span></span></code></pre></div>
+<p>On va changer <code>v</code> par un paterne plus interressant.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> (a<span class="op">,</span> b<span class="op">,</span> c) <span class="op">=</span> (<span class="dv">345</span><span class="op">,</span> <span class="cn">true</span><span class="op">,</span> <span class="ch">&#39;a&#39;</span>)<span class="op">;</span></span></code></pre></div>
+<p>Ici, on déconstruit le tuple pour obtenir trois variables <code>a</code>, <code>b</code> et <code>c</code> qui contiennent respectivement <code>345</code>, <code>true</code> et <code>'a'</code>.</p>
+<h2 id="paterne-tableau">Paterne tableau</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> t <span class="op">=</span> [<span class="dv">4</span><span class="op">,</span> <span class="dv">6</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">9</span>]<span class="op">;</span></span></code></pre></div>
+<p>Changeons <code>t</code> par un paterne plus interressant.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> [a<span class="op">,</span> b<span class="op">,</span> c<span class="op">,</span> d] <span class="op">=</span> [<span class="dv">4</span><span class="op">,</span> <span class="dv">6</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">9</span>]<span class="op">;</span></span></code></pre></div>
+<p>On a déconstruit le tableau.</p>
+<h2 id="paterne-structure">Paterne structure</h2>
+<p>Il est possible de destructurer une structure avec un paterne.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Point <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> p <span class="op">=</span> Point<span class="op">{</span>x<span class="op">:</span> <span class="dv">9.0</span><span class="op">,</span> y<span class="op">:</span> <span class="dv">3.0</span><span class="op">};</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> Point<span class="op">{</span>x<span class="op">:</span> a<span class="op">,</span> y<span class="op">:</span> b<span class="op">}</span> <span class="op">=</span> p<span class="op">;</span></span></code></pre></div>
+<p>On récupère les deux champs dans <code>a</code> et <code>b</code>.</p>
+<h2 id="combinaisons">Combinaisons</h2>
+<p>Les paternes sont récursif, donc on peut les combiner à l’infini.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> complex <span class="op">=</span> ((<span class="cn">true</span><span class="op">,</span> <span class="ch">&#39;f&#39;</span>)<span class="op">,</span> [<span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">5</span>]<span class="op">,</span> Point<span class="op">{</span>x<span class="op">:</span> <span class="dv">1.0</span><span class="op">,</span> y<span class="op">:</span> <span class="dv">2.0</span><span class="op">}</span>)<span class="op">;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> ((a<span class="op">,</span> b)<span class="op">,</span> [c<span class="op">,</span> d<span class="op">,</span> f]<span class="op">,</span> Point<span class="op">{</span>x<span class="op">:</span> g<span class="op">,</span> y<span class="op">:</span> h<span class="op">}</span>) <span class="op">=</span> complex<span class="op">;</span></span></code></pre></div>
+<p>Et on est pas obligé de destructuré jusqu’au type primitif.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> complex <span class="op">=</span> ((<span class="cn">true</span><span class="op">,</span> <span class="ch">&#39;f&#39;</span>)<span class="op">,</span> [<span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">5</span>]<span class="op">,</span> Point<span class="op">{</span>x<span class="op">:</span> <span class="dv">1.0</span><span class="op">,</span> y<span class="op">:</span> <span class="dv">2.0</span><span class="op">}</span>)<span class="op">;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> (a<span class="op">,</span> [b<span class="op">,</span> c<span class="op">,</span> d]<span class="op">,</span> e) <span class="op">=</span> complex<span class="op">;</span></span></code></pre></div>
+<p>Ici, on a gardé le tuple <code>(true, 'f')</code> dans <code>a</code> et le <code>Point</code> dans <code>e</code>.</p>
+<h2 id="paternes-références">Paternes références</h2>
+<p>Il est même possible de destructurer une référence, en d’autres termes, la déréférencer.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="op">&amp;</span>a <span class="op">=</span> <span class="op">&amp;</span><span class="dv">0</span><span class="op">;</span></span></code></pre></div>
+<p>On récupère l’adresse d’une valeur mais le paterne <code>&amp;a</code> récupère dans <code>a</code> la valeur référée.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Il faut voir les paternes comme l’inverse de la construction. Tout se qui est construit (tuples, tableaux, références, structures, etc… ) peut-être déconstruit en utilisant la même notation mais dans un paterne.</p>
+    </body>
+</html>

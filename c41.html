@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+41
+" class="index-link">← retour</a>
+<h1 id="saffranchir-des-règles">S’affranchir des règles</h1>
+<p>Nous avons vu que les règles strictes en Rust sont très restrictives. Notament les règles d’appartenance et de duré de vie. C’est ces denières qui empêchent d’allouer de la mémoire dynamiquement et de l’utiliser car il n’y a aucun moyen de déterminer son apartenance ni sa duré de vie (elle n’en a pas vraiment, puisqu’elle est dynamique).</p>
+<h2 id="mot-clé-unsafe">Mot clé <code>unsafe</code></h2>
+<p>Ne pas pouvoir utiliser de la mémoire dynamiquement allouée serait trop restrictif et c’est pour cela qu’il existe un mot clé <code>unsafe</code> qui permet de passer outre certaines règles.</p>
+<p>Il existe dans la bibliothèque standard une fonction qui permet d’allouer dynamiquement de la mémoire.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">unsafe</span> <span class="kw">fn</span> alloc(layout<span class="op">:</span> Layout) <span class="op">-&gt;</span> <span class="op">*</span><span class="kw">mut</span> <span class="dt">u8</span></span></code></pre></div>
+<p>Cette dernière prend une valeur de type <code>Layout</code> qui est pour faire simple la taille du segment que l’on veut allouer et retourne un <strong>pointeur</strong> sur un octet, oui, tu m’as bien entendu, il s’agit d’un <strong>pointeur</strong> (<code>*u8</code>) et non d’une <strong>référence</strong> (<code>&amp;u8</code>). Une valeur de type pointeur (<code>*</code>) peut être créé sans avoir à respecter d’apartenance ni de duré de vie, il peut même pointer n’importe où, c’est comme un pointeur en C. Ici, le type indique qu’il pointe sur un <code>u8</code> mais c’est simplement car la fonction <code>alloc</code> ignore ce pour quoi ce segment va servir.</p>
+<h2 id="block-unsafe">Block <code>unsafe</code></h2>
+<p>Appelons <code>alloc</code> pour allouer un segment pouvant stocker un <code>i32</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">std::alloc::</span><span class="op">{</span>alloc<span class="op">,</span> Layout<span class="op">};</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="op">*</span><span class="kw">mut</span> <span class="dt">u8</span> <span class="op">=</span> alloc(<span class="pp">Layout::new::</span><span class="op">&lt;</span><span class="dt">i32</span><span class="op">&gt;</span>())<span class="op">;</span> <span class="co">// ERROR</span></span></code></pre></div>
+<p>Le compilateur se pleins. Effectivement, ce qui se passe ici est qualifié de <code>unsafe</code>, le compilateur ne peux plus garantir que l’on ne fait pas d’erreur. Il faut indiquer au compilateur que l’on souhaite prendre le risque en utilisant un block <code>unsafe</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">std::alloc::</span><span class="op">{</span>alloc<span class="op">,</span> Layout<span class="op">};</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="op">*</span><span class="kw">mut</span> <span class="dt">u8</span> <span class="op">=</span> <span class="kw">unsafe</span> <span class="op">{</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    alloc(<span class="pp">Layout::new::</span><span class="op">&lt;</span><span class="dt">i32</span><span class="op">&gt;</span>())</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<h2 id="ne-jamais-utiliser-unsafe">Ne jamais utiliser <code>unsafe</code></h2>
+<p>Heuresement, nous n’auront jamais à utiliser <code>unsafe</code> car il existe déjà dans la bibliothèque standard des types et des fonctions qui donnent accès à des fonctionnalités <code>unsafe</code> en utilisant <code>unsafe</code> uniquement en <strong>interne</strong>, ça signifie que l’on a pas à se soucier de quoi que ce soit.</p>
+<h2 id="pointeur-unique">Pointeur unique</h2>
+<p>Par exemple, si l’on souhaite créer un arbre binaire.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> BinTree <span class="op">{</span> <span class="co">// ERROR</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    Leaf<span class="op">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    Node(BinTree<span class="op">,</span> BinTree)<span class="op">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Cette structure de donné est récursive, elle se contient elle même, donc sa taille devrait être infinie. Pour résoudre ce problème, on peut utiliser l’allocation dynamique de sorte à ce que les éléments récursifs ne soit pas stockés dans la structure elle-même.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> BinTree <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    Leaf<span class="op">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    Node(<span class="dt">Box</span><span class="op">&lt;</span>BinTree<span class="op">&gt;,</span> <span class="dt">Box</span><span class="op">&lt;</span>BinTree<span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Le type <code>Box</code> représente un pointeur unique, c’est à dire que le segment pointé a la même duré de vie et apartenance que le pointeur.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">Box</span><span class="op">&lt;</span><span class="dt">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="dt">Box</span><span class="pp">::</span>new(<span class="dv">42</span>)<span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">34</span> <span class="op">+</span> <span class="op">*</span>a<span class="op">;</span></span></code></pre></div>
+<p>Jettes un oeuil à la documentation.</p>
+<h2 id="tableau-dynamique">Tableau dynamique</h2>
+<p>Le type <code>Vec</code> représente un tableau dont la taille est dynamique.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="kw">mut</span> a <span class="op">=</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>a<span class="op">.</span>push(<span class="dv">42</span>)<span class="op">;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>a<span class="op">.</span>push(<span class="dv">34</span>)<span class="op">;</span></span></code></pre></div>
+<p>Ce type alloue un segment en fonction du besoins de stockage. Jettes un oeuil à la documentation.</p>
+<p>Le type <code>String</code> est quasi équivalent à un <code>Vec&lt;u8&gt;</code>. Depuis la documentation, tu peux accèder au code source, et voir comment est définit la structure <code>String</code> (à droite il y a <code>[src]</code>, clique dessus).</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> <span class="dt">String</span> <span class="op">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    vec<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">u8</span><span class="op">&gt;,</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="échanger">Échanger</h2>
+<p>Pour échanger deux entiers, c’est facile.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> echange_i32(a<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">i32</span><span class="op">,</span> b<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">i32</span>) <span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> tmp <span class="op">=</span> <span class="op">*</span>a<span class="op">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>a <span class="op">=</span> <span class="op">*</span>b<span class="op">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>b <span class="op">=</span> tmp<span class="op">;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Mais échanger des valeurs qui ne sont pas copiables est une autre histoire.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> echange<span class="op">&lt;</span>T<span class="op">&gt;</span>(a<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> T<span class="op">,</span> b<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> T) <span class="op">{</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> tmp <span class="op">=</span> <span class="op">*</span>a<span class="op">;</span> <span class="co">// ERROR</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>a <span class="op">=</span> <span class="op">*</span>b<span class="op">;</span> <span class="co">// ERROR</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>b <span class="op">=</span> tmp<span class="op">;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On doit extraire la valeur de <code>a</code> et de <code>b</code>. On ne peut pas faire ça selon les règles d’appartenance en Rust. Mais une fonction <code>swap</code> dans la bibliothèque standard le fait.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> echange<span class="op">&lt;</span>T<span class="op">&gt;</span>(a<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> T<span class="op">,</span> b<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> T) <span class="op">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="pp">std::mem::</span>swap(a<span class="op">,</span> b)<span class="op">;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="appels-systèmes">Appels systèmes</h2>
+<p>Les appels systèmes ne sont pas du tout sécurisé, il ne sont donc pas directement accessibles.</p>
+<p>Pour ouvrir un fichier, il existe le type <code>File</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">std::fs::</span>File<span class="op">;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> file <span class="op">=</span> <span class="pp">File::</span>open(<span class="st">&quot;hello.txt&quot;</span>)<span class="op">.</span>unwrap()<span class="op">;</span></span></code></pre></div>
+<p>Pour ouvrir une socket, il existe les types <code>UdpSocket</code>, <code>TcpStream</code> et <code>TcpListener</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">std::net::</span>UdpSocket<span class="op">;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="kw">mut</span> socket <span class="op">=</span> <span class="pp">UdpSocket::</span>bind(<span class="st">&quot;127.0.0.1:34254&quot;</span>)<span class="op">.</span>unwrap()<span class="op">;</span></span></code></pre></div>
+<h2 id="conclusion">Conclusion</h2>
+<p>Il n’y a pas besoins d’utiliser le mot clé <code>unsafe</code>, et de toute façon il ne faut pas, car il existe déjà des types et fonctions qui le font pour toi de façon sécurisée. C’est comme s’il y avait deux mondes: le monde sécurisé et le monde dangereux. Tant que tu n’utilises pas le mot clé <code>unsafe</code>, tu restes du coté sécurisé. Il existe des fonctions et types dans la bibliothèque standard qui s’aventure dans le monde dangereux sans que tu ais à le faire toi même, un peu comme si tu demandait à un paladin en armure d’aller chercher quelque chose pour toi dans la forêt maudite.</p>
+    </body>
+</html>

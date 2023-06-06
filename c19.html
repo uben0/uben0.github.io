@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+19
+" class="index-link">← retour</a>
+<h1 id="les-références">Les références</h1>
+<p>Il n’y a pas de pointeurs à proprement parler en <em>Rust</em> mais des <strong>références</strong>. Une référence est techniquement un pointeur mais avec des règles strictes. Une référence est garantie de toujours être valide. On ne peut pas faire d’erreur en utilisant une référence.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">:</span> <span class="op">&amp;</span><span class="dt">i32</span> <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;a: {}, b: {}&quot;</span><span class="op">,</span> a<span class="op">,</span> <span class="op">*</span>b)<span class="op">;</span></span></code></pre></div>
+<pre><code>a: 4, b: 4</code></pre>
+<p>La variable <code>b</code> est une référence vers <code>a</code>, on peut voir qu’il s’agit d’une référence grâce à son type noté <code>&amp;i32</code> car <code>i32</code> est précédé d’un <code>&amp;</code>. La variable <code>b</code> contient l’adresse mémoire de la variable <code>a</code>.</p>
+<h2 id="déréférer">Déréférer</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">:</span> <span class="op">&amp;</span><span class="dt">i32</span> <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> c<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="op">*</span>b<span class="op">;</span></span></code></pre></div>
+<p>On utilise l’opérateur <code>*</code> pour accéder à la valeur derrière une référence. Cependant, dans beaucoup de cas, ce n’est pas necessaire, la déréférence se fait automatiquement. Le mieux quand on débute est de ne déréférencer que quand le compilateur se plein qu’on ne l’a pas fait.</p>
+<h2 id="mutabilité-par-référence">Mutabilité par référence</h2>
+<p>Imaginons que je veuille déplacer un <code>Point</code> d’un delta <code>x</code> et <code>y</code>, alors je peut écrire une fonction :</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> deplace_point(p<span class="op">:</span> Point<span class="op">,</span> dx<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span> dy<span class="op">:</span> <span class="dt">f64</span>) <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    p<span class="op">.</span>x <span class="op">+=</span> dx<span class="op">;</span> <span class="co">// ERROR</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    p<span class="op">.</span>y <span class="op">+=</span> dy<span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Oups… On a oublié de mettre <code>p</code> mutable, corrigeons ça :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> deplace_point(<span class="kw">mut</span> p<span class="op">:</span> Point<span class="op">,</span> dx<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span> dy<span class="op">:</span> <span class="dt">f64</span>) <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    p<span class="op">.</span>x <span class="op">+=</span> dx<span class="op">;</span> <span class="co">// OK</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    p<span class="op">.</span>y <span class="op">+=</span> dy<span class="op">;</span> <span class="co">// OK</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Seulement voilà, si j’utilise ma fonction, elle semble n’avoir aucun effet :</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> p<span class="op">:</span> Point <span class="op">=</span> Point <span class="op">{</span> x<span class="op">:</span> <span class="dv">10.0</span><span class="op">,</span> y<span class="op">:</span> <span class="dv">7.0</span> <span class="op">};</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> p)<span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>deplace_point(p<span class="op">,</span> <span class="dv">5.0</span><span class="op">,</span> <span class="dv">8.0</span>)<span class="op">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> p)<span class="op">;</span></span></code></pre></div>
+<pre><code>Point { x: 10.0, y: 7.0 }
+Point { x: 10.0, y: 7.0 }</code></pre>
+<p>En appelant <code>deplace_point</code> on a copié <code>p</code>, donc dans <code>deplace_point</code> on modifie une variable <strong>locale</strong>, elle apartient à <code>deplace_point</code>, elle cesse d’exister quand <code>deplace_point</code> se termine. C’est exactement comme si on avait incrémenté un entier :</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> incremente(<span class="kw">mut</span> x<span class="op">:</span> <span class="dt">i32</span>) <span class="op">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    x <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>incremente(a)<span class="op">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{}&quot;</span><span class="op">,</span> a)<span class="op">;</span></span></code></pre></div>
+<pre><code>4</code></pre>
+<p>Une des solutions serait de retourner la nouvelle valeur :</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> deplace_point(<span class="kw">mut</span> p<span class="op">:</span> Point<span class="op">,</span> dx<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span> dy<span class="op">:</span> <span class="dt">f64</span>) <span class="op">-&gt;</span> Point <span class="op">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    p<span class="op">.</span>x <span class="op">+=</span> dx<span class="op">;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    p<span class="op">.</span>y <span class="op">+=</span> dy<span class="op">;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> p<span class="op">;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="kw">mut</span> p<span class="op">:</span> Point <span class="op">=</span> Point <span class="op">{</span> x<span class="op">:</span> <span class="dv">10.0</span><span class="op">,</span> y<span class="op">:</span> <span class="dv">7.0</span> <span class="op">};</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> p)<span class="op">;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> deplace_point(p<span class="op">,</span> <span class="dv">5.0</span><span class="op">,</span> <span class="dv">8.0</span>)<span class="op">;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> p)<span class="op">;</span></span></code></pre></div>
+<pre><code>Point { x: 10.0, y: 7.0 }
+Point { x: 15.0, y: 15.0 }</code></pre>
+<p>Ça fonctionne mais ce n’est pas pratique, et puis il y a un défaut, imaginons que <code>Point</code> soit une structure volumineuse, c’est à dire avec beaucoup d’atributs, on copierai beaucoup de donnés pour rien.</p>
+<p>La solution est de prendre une référence mutable:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> deplace_point(p<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Point<span class="op">,</span> dx<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span> dy<span class="op">:</span> <span class="dt">f64</span>) <span class="op">{</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    p<span class="op">.</span>x <span class="op">+=</span> dx<span class="op">;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    p<span class="op">.</span>y <span class="op">+=</span> dy<span class="op">;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="kw">mut</span> p<span class="op">:</span> Point <span class="op">=</span> Point <span class="op">{</span> x<span class="op">:</span> <span class="dv">10.0</span><span class="op">,</span> y<span class="op">:</span> <span class="dv">7.0</span> <span class="op">};</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> p)<span class="op">;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>deplace_point(<span class="op">&amp;</span><span class="kw">mut</span> p<span class="op">,</span> <span class="dv">5.0</span><span class="op">,</span> <span class="dv">8.0</span>)<span class="op">;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> p)<span class="op">;</span></span></code></pre></div>
+<pre><code>Point { x: 10.0, y: 7.0 }
+Point { x: 15.0, y: 15.0 }</code></pre>
+<h2 id="référer-pour-ne-pas-déplacer">Référer pour ne pas déplacer</h2>
+<p>Si <code>Cerlce</code> était une structure volumineuse, elle ne devrait pas être copiable. Et si l’on souhaitait avoir une fonction <code>air_cercle</code> qui retourne l’air du cercle, alors il faudrait prendre le <code>Cercle</code> par référence et non par valeur, sinon cette dernière serait déplacée.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> air_cercle(c<span class="op">:</span> <span class="op">&amp;</span>Cercle) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> c<span class="op">.</span>rayon <span class="op">*</span> c<span class="op">.</span>rayon <span class="op">*</span> <span class="dv">3.14159</span><span class="op">;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Beaucoup de type ne sont pas copiables. Les prendre par valeur les déplacerait donc dans le cas où le type n’est pas copiable, on est obligé de prendre une référence si on ne veut pas priver l’appelant de sa valeur.</p>
+<h2 id="référence-dune-valeur">Référence d’une valeur</h2>
+<p>Il est possible de prendre l’adresse d’une valeur et pas uniquement d’une variable.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a <span class="op">=</span> <span class="op">&amp;</span><span class="dv">0</span><span class="op">;</span></span></code></pre></div>
+<p>C’est par exemple ce qui se passe quand on utilise une chaîne de caractère litérale.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span> <span class="op">=</span> <span class="st">&quot;hello&quot;</span><span class="op">;</span></span></code></pre></div>
+    </body>
+</html>

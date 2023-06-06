@@ -1,0 +1,150 @@
+html {
+    background-color: #222427;
+}
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: large;
+    width: 38em;
+    /* background-color: #282C34; */
+    color: #e6e6e6;
+    margin: 2em auto;
+    padding: 0.5em 2em;
+    border-radius: 0.4em;
+    /* border: solid 1px grey; */
+    /* box-shadow: 0 0 2em rgba(0, 0, 0, 0.4); */
+    text-align: justify;
+}
+:target > li {
+    border: solid;
+}
+pre {
+    background-color: #2e3135;
+    padding: 1em 0 1em 1.2em;
+    border-radius: 0.3em;
+    margin: 0.6em 0;
+    color: white;
+}
+code{
+    white-space: pre;
+}
+
+pre:not(.sourceCode) {
+    border: 2px #FFFFFF40;
+    border-style: dotted;
+}
+
+pre.bash {
+    border: solid #fddd30;
+    border-width: 0 0 0 1em;
+}
+
+:not(pre) > code:not(.sourceCode) {
+    color: rgb(158, 255, 255);
+    font-weight: bold;
+    padding: 2px;
+    /* border-radius: 0.3em;
+    background-color: rgba(0, 0, 0, 0.067); */
+}
+td {
+    border: 1px dotted #FFFFFF40;
+    padding: 0 0.2em;
+}
+th {
+    border: 1px dotted #FFFFFF40;
+    padding: 0.3em;
+    background-color: #FFFFFF30;
+}
+table{
+    border-collapse: collapse;
+}
+li.chapter {
+    padding: 1em;
+    margin: 1em;
+    background-color: #2e3135;
+    color: white;
+    border-radius: 0.3em;
+}
+li.chapter:hover {
+    background-color: #40444d;
+}
+
+a {
+    color: #ffe868;
+    text-decoration: none;
+}
+
+a.link {
+    color: rgb(100, 255, 255);
+    text-decoration: underline;
+}
+ul.chapters {
+    list-style-type: none;
+    padding-left: 0;
+}
+.index-link {
+    position: fixed;
+    background-color:  #363a43;
+    padding: 1em;
+    color: white;
+    font-weight: bold;
+    margin-left: -10em;
+    border-radius: 0.2em;
+    box-shadow: 0 0 1em rgb(0, 0, 0, 0.4);
+}
+.index-link:hover {
+    background-color: #40444d;
+}
+
+div.sourceCode {
+    overflow-x: auto;
+}
+
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+    border: none;
+}
+
+table.sourceCode {
+    width: 100%;
+    line-height: 100%;
+}
+
+code span.co { color: #57A64A; font-style: italic; } /* Comment */
+code span.al { color: #57A64A; font-style: italic; }
+
+code.rust span.bu { font-style: italic; }
+code.rust span.kw { color: #F47067; }
+code.rust span.dt { color: #F69D50; }
+code.rust span.dv { color: #6CB6FF; } /* DecVal */
+code.rust span.st { color: #96D0FF; } /* String */
+code.rust span.ch { color: #96D0FF; } /* Char */
+code.rust span.ot { color: #fddd30; } /* Other (lifetime) */
+code.rust span.at { color: #a7a7a7; }
+code.rust span.op { color: #AAAAAA; font-weight: bold; } /* Operator */
+code.rust span.cf { color: #569CD6; } /* ControlFlow */
+code.rust span.pp { color: #61e7cc; } /* Preprocessor */
+
+code.cpp span.dt { color: #F47067; }
+code.cpp span.dv { color: #6CB6FF; }
+code.cpp span.cf { color: #F47067; }
+code.cpp span.at { color: #F47067; }
+code.cpp span.st { color: #96D0FF; }
+
+code span.cn { color: #569CD6; } /* Constant */
+code span.sc { color: #D69D85; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+/* code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } Annotation */
+/* code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } CommentVar */
+/* code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } Information */
+
+code.ini span.kw { color: #F69D50; }
+code.ini span.dt { color: #F47067; }
+code.ini span.st { color: #96D0FF; }
+code.ini span.dv { color: #96D0FF; }
+code.ini span.fl { color: #96D0FF; }
+
+
+code.bash span.ex { color: #fddd30; font-weight: bold; }
+code.bash span.bu { color: #fddd30; font-weight: bold; }

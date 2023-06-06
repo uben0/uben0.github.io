@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+05
+" class="index-link">← retour</a>
+<h1 id="types">Types</h1>
+<p>En Rust, les types sont très importants, et des règles strictes les régissent. Il y a les types primitifs (définits dans le language) comme les entiers, les booléens, les charactères, les tableaux, les tuples, les références, les fonctions, etc… Et d’autres type qui sont eux, déclarés, comme les structures et les énumération.</p>
+<h2 id="types-primitifs">Types primitifs</h2>
+<h2 id="entiers">Entiers</h2>
+<table>
+<thead>
+<tr class="header">
+<th>type</th>
+<th style="text-align: right;">bits</th>
+<th style="text-align: right;">min val</th>
+<th style="text-align: right;">max val</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>u8</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">255</td>
+</tr>
+<tr class="even">
+<td><code>u16</code></td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">65 535</td>
+</tr>
+<tr class="odd">
+<td><code>u32</code></td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4 294 967 296</td>
+</tr>
+<tr class="even">
+<td><code>u64</code></td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">…</td>
+</tr>
+<tr class="odd">
+<td><code>usize</code></td>
+<td style="text-align: right;">?</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">…</td>
+</tr>
+<tr class="even">
+<td><code>i8</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">-128</td>
+<td style="text-align: right;">127</td>
+</tr>
+<tr class="odd">
+<td><code>i16</code></td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">-32768</td>
+<td style="text-align: right;">32767</td>
+</tr>
+<tr class="even">
+<td><code>i32</code></td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">-2147483648</td>
+<td style="text-align: right;">2147483647</td>
+</tr>
+<tr class="odd">
+<td><code>i64</code></td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+</tr>
+<tr class="even">
+<td><code>isize</code></td>
+<td style="text-align: right;">?</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+</tr>
+</tbody>
+</table>
+<p>Les types <code>usize</code> et <code>isize</code> ont une taille en bit qui dépend de l’architecture du processeur, c’est à dire <code>32</code> bits pour un CPU 32 bits et <code>64</code> pour un CPU 64 bits.</p>
+<h2 id="décimaux">Décimaux</h2>
+<table>
+<thead>
+<tr class="header">
+<th>type</th>
+<th style="text-align: right;">bits</th>
+<th style="text-align: right;">min val</th>
+<th style="text-align: right;">max val</th>
+<th style="text-align: right;">exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>f32</code></td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">-34028235 · 10^31</td>
+<td style="text-align: right;">34028235 · 10^31</td>
+<td style="text-align: right;"><code>-0.00985</code></td>
+</tr>
+<tr class="even">
+<td><code>f64</code></td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">-17976931348623157 · 10^292</td>
+<td style="text-align: right;">17976931348623157 · 10^292</td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="autres">Autres</h2>
+<table>
+<thead>
+<tr class="header">
+<th>type</th>
+<th style="text-align: right;">bits</th>
+<th style="text-align: right;">exemple 1</th>
+<th style="text-align: right;">exemple 2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>bool</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;"><code>true</code></td>
+<td style="text-align: right;"><code>false</code></td>
+</tr>
+<tr class="even">
+<td><code>char</code></td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;"><code>'a'</code></td>
+<td style="text-align: right;"><code>'あ'</code></td>
+</tr>
+</tbody>
+</table>
+<p>Le type <code>char</code> est codé sur 32 bits, ce n’est pas un octet comme en <em>C</em>. Cela permet de représenter tout les charactères unicode !</p>
+<h2 id="tableaux">Tableaux</h2>
+<table>
+<thead>
+<tr class="header">
+<th>type</th>
+<th style="text-align: right;">bits</th>
+<th style="text-align: right;">exmple</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>[u32; 4]</code></td>
+<td style="text-align: right;">32 × 4</td>
+<td style="text-align: right;"><code>[8, 3, 5, 1]</code></td>
+</tr>
+<tr class="even">
+<td><code>[bool; 3]</code></td>
+<td style="text-align: right;">8 × 3</td>
+<td style="text-align: right;"><code>[true, true, false]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Un tableau peut être de toutes tailles et de tous types.</p>
+<h2 id="tuples">Tuples</h2>
+<table>
+<thead>
+<tr class="header">
+<th>type</th>
+<th style="text-align: right;">bits</th>
+<th style="text-align: right;">exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>()</code></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;"><code>()</code></td>
+</tr>
+<tr class="even">
+<td><code>(i32,)</code></td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;"><code>(10,)</code></td>
+</tr>
+<tr class="odd">
+<td><code>(i32, bool)</code></td>
+<td style="text-align: right;">32 + 8</td>
+<td style="text-align: right;"><code>(8, true)</code></td>
+</tr>
+<tr class="even">
+<td><code>(char, bool, u16)</code></td>
+<td style="text-align: right;">32 + 8 + 16</td>
+<td style="text-align: right;"><code>('a', true, 34)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Les tuples sont un groupement. Ils peuvent contenir zero, une ou plusieurs valeurs.</p>
+<h2 id="conversion">Conversion</h2>
+<p>Il n’y a pas de conversion implicite en Rust d’un type vers un autre, par exemple:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> a<span class="op">;</span> <span class="co">// ERROR</span></span></code></pre></div>
+<p>On essaye d’affecter une valeur de type <code>i32</code> à une variable de type <code>u32</code>. La solution est d’utiliser le mot clé <code>as</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> a <span class="kw">as</span> <span class="dt">u32</span><span class="op">;</span> <span class="co">// OK</span></span></code></pre></div>
+<p>Si il n’y a pas de conversion implicite, c’est parce que Rust priorétise la fiabilité du code, à titre d’exemple, c’est une conversion entre un flotant 64 bits vers un entier 16 bits qui a causé la destruction d’une ariane 5 lors de son décolage.</p>
+<h2 id="opérations">Opérations</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">42</span><span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> a <span class="op">*</span> <span class="dv">3</span> <span class="op">+</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> c<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> (b <span class="op">-</span> <span class="dv">30</span>) <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> d<span class="op">:</span> <span class="dt">bool</span> <span class="op">=</span> c <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> e<span class="op">:</span> <span class="dt">bool</span> <span class="op">=</span> b <span class="op">&lt;</span> <span class="dv">250</span> <span class="op">&amp;&amp;</span> d <span class="op">==</span> <span class="cn">false</span><span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> f<span class="op">:</span> <span class="dt">bool</span> <span class="op">=</span> <span class="op">!</span>e <span class="op">||</span> b <span class="op">!=</span> a<span class="op">;</span></span></code></pre></div>
+<p>Les opérations fonctionnent comme en <em>C</em>, si ce n’est qu’elles sont sensibles au type. En effet, il n’est possible par exemple de ne multiplier que deux valeurs du même types:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> <span class="dv">42</span><span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">:</span> <span class="dt">i16</span> <span class="op">=</span> <span class="op">-</span><span class="dv">3</span><span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">:</span> <span class="dt">i16</span> <span class="op">=</span> a <span class="op">*</span> b<span class="op">;</span> <span class="co">// ERROR</span></span></code></pre></div>
+<p>Il faut convertir une des valeurs</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> <span class="dv">42</span><span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">:</span> <span class="dt">i16</span> <span class="op">=</span> <span class="op">-</span><span class="dv">3</span><span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">:</span> <span class="dt">i16</span> <span class="op">=</span> (a <span class="kw">as</span> <span class="dt">i16</span>) <span class="op">*</span> b<span class="op">;</span></span></code></pre></div>
+<p>C’est valable pour toutes les opérations binaires <code>+</code>, <code>-</code>, <code>*</code> et <code>/</code>.</p>
+<h2 id="chaînes-de-caractères">Chaînes de caractères</h2>
+<p>Il y a deux types pour les chaînes de caractères: <code>String</code> et <code>&amp;str</code>, le premier est une structure, l’autre une référence. J’expliquerais la différence entre <code>String</code> et <code>&amp;str</code> plus tard.</p>
+    </body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+37
+" class="index-link">← retour</a>
+<h1 id="jeu-déchecs-2">Jeu d’échecs (2)</h1>
+<h2 id="le-plateau">Le plateau</h2>
+<p>Créons le plateau de jeu qui sera un tableau en deux dimension de <code>8</code> par <code>8</code>. Nous le stockerons dans une structure <code>Game</code> représentant le jeu:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="bu">PartialEq</span><span class="op">,</span> <span class="bu">Eq</span><span class="at">)]</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Game <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    board<span class="op">:</span> [[Piece<span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]<span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Notez que l’on ne dérive pas <code>Copy</code>, car <code>Game</code> est une structure volumineuse. On ne souhaite pas qu’elle soit copiable, en revanche elle est tout à fait clonable.</p>
+<p>Sur un emplacement, il peut y avoir une pièce comme il peut ne pas y en avoir une. Mais le problème est que le type de <code>board</code> est un tableau de pièce, il faut changer ça pour pouvoir faire la différence entre un emplacement avec une pièce et un emplacement sans pièce. On peut déclarer une énumération qui fait cela:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> Place <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    Occupied(Piece)<span class="op">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    Free<span class="op">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="bu">PartialEq</span><span class="op">,</span> <span class="bu">Eq</span><span class="at">)]</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Game <span class="op">{</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    board<span class="op">:</span> [[Place<span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]<span class="op">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Cependant, il existe déjà l’énumération <code>Option</code> déclarée dans la bibliothèque standard.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> <span class="dt">Option</span><span class="op">&lt;</span>T<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Some</span>(T)<span class="op">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cn">None</span><span class="op">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>C’est une bonne habitude à avoir que d’utiliser les outils de la bibliothèque standard au lieu de les recoder soi-même.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="bu">PartialEq</span><span class="op">,</span> <span class="bu">Eq</span><span class="at">)]</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Game <span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    board<span class="op">:</span> [[<span class="dt">Option</span><span class="op">&lt;</span>Piece<span class="op">&gt;;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]<span class="op">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="constructeur">Constructeur</h2>
+<p>On va ajouter un constructeur à <code>Game</code> qui initialise le plateau avec les pièces qu’il faut:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Game <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> new() <span class="op">-&gt;</span> Game <span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> g <span class="op">=</span> Game <span class="op">{</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>            board<span class="op">:</span> [[<span class="cn">None</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]<span class="op">,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">};</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> line <span class="op">=</span> [Rook<span class="op">,</span> Knight<span class="op">,</span> Bishop<span class="op">,</span> Queen<span class="op">,</span> King<span class="op">,</span> Bishop<span class="op">,</span> Knight<span class="op">,</span> Rook]<span class="op">;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">8</span> <span class="op">{</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            g<span class="op">.</span>board[<span class="dv">0</span>][x] <span class="op">=</span> <span class="cn">Some</span>(Piece<span class="op">{</span>t<span class="op">:</span> line[x]<span class="op">,</span> c<span class="op">:</span> Black<span class="op">}</span>)<span class="op">;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>            g<span class="op">.</span>board[<span class="dv">1</span>][x] <span class="op">=</span> <span class="cn">Some</span>(Piece<span class="op">{</span>t<span class="op">:</span> Pawn<span class="op">,</span>    c<span class="op">:</span> Black<span class="op">}</span>)<span class="op">;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>            g<span class="op">.</span>board[<span class="dv">6</span>][x] <span class="op">=</span> <span class="cn">Some</span>(Piece<span class="op">{</span>t<span class="op">:</span> Pawn<span class="op">,</span>    c<span class="op">:</span> White<span class="op">}</span>)<span class="op">;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>            g<span class="op">.</span>board[<span class="dv">7</span>][x] <span class="op">=</span> <span class="cn">Some</span>(Piece<span class="op">{</span>t<span class="op">:</span> line[x]<span class="op">,</span> c<span class="op">:</span> White<span class="op">}</span>)<span class="op">;</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> g<span class="op">;</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="affichage">Affichage</h2>
+<p>Pour afficher le jeu dans le terminal, on peut utiliser les caractères unicode de pièces d’échecs et avoir une méthode sur <code>Piece</code> qui renvoi le caractère correspondant:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Piece <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> to_unicode(<span class="kw">self</span><span class="op">:</span> Piece) <span class="op">-&gt;</span> <span class="dt">char</span> <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">match</span> (<span class="kw">self</span><span class="op">.</span>c<span class="op">,</span> <span class="kw">self</span><span class="op">.</span>t) <span class="op">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            (Black<span class="op">,</span> King  ) <span class="op">=&gt;</span> <span class="ch">&#39;♚&#39;</span><span class="op">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>            (Black<span class="op">,</span> Queen ) <span class="op">=&gt;</span> <span class="ch">&#39;♛&#39;</span><span class="op">,</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            (Black<span class="op">,</span> Rook  ) <span class="op">=&gt;</span> <span class="ch">&#39;♜&#39;</span><span class="op">,</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            (Black<span class="op">,</span> Knight) <span class="op">=&gt;</span> <span class="ch">&#39;♞&#39;</span><span class="op">,</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>            (Black<span class="op">,</span> Bishop) <span class="op">=&gt;</span> <span class="ch">&#39;♝&#39;</span><span class="op">,</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>            (Black<span class="op">,</span> Pawn  ) <span class="op">=&gt;</span> <span class="ch">&#39;♟&#39;</span><span class="op">,</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>            (White<span class="op">,</span> King  ) <span class="op">=&gt;</span> <span class="ch">&#39;♔&#39;</span><span class="op">,</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>            (White<span class="op">,</span> Queen ) <span class="op">=&gt;</span> <span class="ch">&#39;♕&#39;</span><span class="op">,</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>            (White<span class="op">,</span> Rook  ) <span class="op">=&gt;</span> <span class="ch">&#39;♖&#39;</span><span class="op">,</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>            (White<span class="op">,</span> Knight) <span class="op">=&gt;</span> <span class="ch">&#39;♘&#39;</span><span class="op">,</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>            (White<span class="op">,</span> Bishop) <span class="op">=&gt;</span> <span class="ch">&#39;♗&#39;</span><span class="op">,</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>            (White<span class="op">,</span> Pawn  ) <span class="op">=&gt;</span> <span class="ch">&#39;♙&#39;</span><span class="op">,</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Et ajouter une méthode <code>print</code> dans le block <code>impl</code> de <code>Game</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> print(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game) <span class="op">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">8</span> <span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">8</span> <span class="op">{</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>            <span class="kw">match</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                <span class="cn">Some</span>(piece) <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                    <span class="pp">print!</span>(<span class="st">&quot;{} &quot;</span><span class="op">,</span> piece<span class="op">.</span>to_unicode())<span class="op">;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                <span class="cn">None</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                    <span class="pp">print!</span>(<span class="st">&quot;  &quot;</span>)<span class="op">;</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;&quot;</span>)<span class="op">;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On peut créer un <code>Game</code> et l’afficher:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> g <span class="op">=</span> <span class="pp">Game::</span>new()<span class="op">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    g<span class="op">.</span>print()<span class="op">;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Ce qui donne:</p>
+<pre><code>♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜ 
+♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟ 
+                
+                
+                
+                
+♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙ 
+♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖ </code></pre>
+<h2 id="progression-du-projet">Progression du projet</h2>
+<p>Trouves dans le fichier <a href="https://gitlab.com/uben0/rust-tutoriel-fr/-/raw/master/37/main.rs"><code>main.rs</code></a> le projet.</p>
+    </body>
+</html>

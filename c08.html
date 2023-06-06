@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+08
+" class="index-link">← retour</a>
+<h1 id="entré-de-texte">Entré de texte</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;Entrez votre âge:&quot;</span>)<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> age<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> user_input_u32()<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;Votre âge est {}&quot;</span><span class="op">,</span> age)<span class="op">;</span></span></code></pre></div>
+<p>On imagine ici que la fonction <code>user_input_u32</code> récupère ce qui est tapé dans le terminal pour l’interpréter comme un entier et le retourner. Malheuresement, il n’y a pas de telle fonction fournie de base, c’est pourquoi je vais en fournir une :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> user_input<span class="op">&lt;</span>T<span class="op">:</span> <span class="pp">std::</span><span class="dt">str</span><span class="pp">::</span><span class="bu">FromStr</span><span class="op">&gt;</span>() <span class="op">-&gt;</span> T</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">where</span> <span class="op">&lt;</span>T <span class="kw">as</span> <span class="pp">std::</span><span class="dt">str</span><span class="pp">::</span><span class="bu">FromStr</span><span class="op">&gt;</span><span class="pp">::</span><span class="cn">Err</span><span class="op">:</span> <span class="pp">std::fmt::</span><span class="bu">Debug</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> l <span class="op">=</span> <span class="dt">String</span><span class="pp">::</span>new()<span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="pp">std::io::</span>stdin()<span class="op">.</span>read_line(<span class="op">&amp;</span><span class="kw">mut</span> l)<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="pp">T::</span>from_str(l<span class="op">.</span>as_str()<span class="op">.</span>trim())<span class="op">.</span>unwrap()</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Nous n’essayerons pas de comprendre ce que fait cette fonction, car ici, beaucoup de notions avancés sont utilisées et ce d’une façon peu élégante. Elle est juste là pour faciliter les entrés de texte dans ce tutoriel.</p>
+<p>Exemple de son utilisation:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;En quelle année es-tu né ?&quot;</span>)<span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> annee_naissance<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> user_input()<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;Quel est ton nom ?&quot;</span>)<span class="op">;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> nom<span class="op">:</span> <span class="dt">String</span> <span class="op">=</span> user_input()<span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Tu es né en {} et tu t&#39;appelles {}.&quot;</span><span class="op">,</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    annee_naissance<span class="op">,</span> nom</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<p>Le type utilisé pour l’année est <code>i32</code> et celui pour le nom est <code>String</code>. Cependant, dans les deux cas, <code>user_input()</code> a été appelée, hors une fonction ne peut retourner qu’un type bien défini, quelle est donc cette magie noir ? Comme je l’ai dis, la déclaration de la fonction <code>user_input</code> fait appelle à des mécaniques que nous ne verons que plus tard.</p>
+    </body>
+</html>

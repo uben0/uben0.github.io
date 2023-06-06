@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+43
+" class="index-link">← retour</a>
+<h1 id="jeu-déchecs-5">Jeu d’échecs (5)</h1>
+<p>On va créer une fonction qui indique pour une pièce du plateau, quelles cases elle peut atteindre. Ce sera une méthode de <code>Game</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> reachable_by_piece(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> y<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    map<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [[<span class="dt">bool</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">{</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="pp">unimplemented!</span>()</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// cette macro permet d&#39;indiquer un endroit du code qui</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// n&#39;a pas encore était implémenté</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Elle prend en paramètre les coordonnées de la pièce sélectionnée et un tableau à deux dimensions de booléens représentant les cases où la pièce peut se rendre.</p>
+<p>Cette fonction a pour but de mettre à <code>true</code> les cases atteignables, elle ne met pas à <code>false</code> celles qui ne le sont pas, car on souhaite par la suite appeler plusieur fois cette fonction sur un même plateau de booléens initialisés à <code>false</code>.</p>
+<p>On test s’il y a bien une pièce à l’emplacement, si oui, on la récupère. Et on match en fonction de son type.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> reachable_by_piece(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> y<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    map<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [[<span class="dt">bool</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">{</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">match</span> piece<span class="op">.</span>t <span class="op">{</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>            Pawn   <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>            Rook   <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>            Knight <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>            Bishop <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>            Queen  <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>            King   <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On crée une méthode de <code>Game</code> qui pour un itérateur de position (<code>PosIter</code>) et une couleur de joueur (<code>Color</code>), remplit dans le tableau de booléens les cases accessibles.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> reachable_by_pos_iter(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    pos_iter<span class="op">:</span> PosIter<span class="op">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    player<span class="op">:</span> Color<span class="op">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    map<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [[<span class="dt">bool</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>) <span class="op">{</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> (x<span class="op">,</span> y) <span class="kw">in</span> pos_iter <span class="op">{</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(p) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> p<span class="op">.</span>c <span class="op">!=</span> player <span class="op">{</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                <span class="co">// si il y a une pièce de l&#39;adversaire</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                <span class="co">// alors on peut la manger</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                map[y][x] <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>            <span class="co">// si il y a une pièce (noire ou blanche)</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>            <span class="co">// alors on ne pourra pas aller plus loins</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>            <span class="kw">break</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        <span class="co">// si il n&#39;y a pas de pièce, on peut s&#39;y déplacer</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        map[y][x] <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        <span class="co">// et on continu d&#39;avancer sur la trajectoire</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On reviens à notre fonction <code>reachable_by_piece</code> et génère les <code>4</code> itérateurs de positions de la Tour. Pour chacun d’eux on appelle <code>reachable_by_pos_iter</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> reachable_by_piece(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> y<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    map<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [[<span class="dt">bool</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">{</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">match</span> piece<span class="op">.</span>t <span class="op">{</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            Pawn   <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>            Knight <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>            Bishop <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>            Queen  <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>            King   <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>            Rook <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> pos_iters <span class="op">=</span> <span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>axes()<span class="op">;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(pos_iters[<span class="dv">0</span>]<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)<span class="op">;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(pos_iters[<span class="dv">1</span>]<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)<span class="op">;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(pos_iters[<span class="dv">2</span>]<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)<span class="op">;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(pos_iters[<span class="dv">3</span>]<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)<span class="op">;</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Ce n’est pas très malin de faire un appel sur chaque éléments du tableau. On peut utiliser un boucle for pour factoriser le code.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> reachable_by_piece(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> y<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    map<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [[<span class="dt">bool</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">{</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">match</span> piece<span class="op">.</span>t <span class="op">{</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            Pawn   <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            Knight <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            Bishop <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>            Queen  <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>            King   <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>            Rook <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> pos_iter <span class="kw">in</span> <span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>axes() <span class="op">{</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>                    <span class="co">//          ^^^^^^^^^^^^^^^^^^^^^^^^^ERROR</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(pos_iter<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>(Cette erreur n’aura pas lieu avec les dernière mise à jour <em>Rust</em>, mais faisont comme si l’erreur se produisait.)</p>
+<p>La méthode <code>axes</code> renvoi un tableau de type <code>[PosIter; 4]</code>, or on ne peut pas utiliser directement un tableau comme itérateur. En revanche, une référence sur un tableau fait l’affaire. Il suffit d’emprunter le tableau avec <code>&amp;</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> reachable_by_piece(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> y<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    map<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [[<span class="dt">bool</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">{</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">match</span> piece<span class="op">.</span>t <span class="op">{</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>            Pawn   <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>            Knight <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>            Bishop <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>            Queen  <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>            King   <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>            Rook <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> pos_iter <span class="kw">in</span> <span class="op">&amp;</span><span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>axes() <span class="op">{</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(pos_iter<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>                    <span class="co">//                         ^^^^^^^^ERROR</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Le compilateur n’est toujours pas content, il se plein que le type attendu est <code>PosIter</code> mais que le type passé est <code>&amp;PosIter</code>. En effet, en itérant sur un type <code>&amp;[PosIter; 4]</code>, les valeurs retournées par l’itérateur son de type <code>&amp;PosIter</code>. Pour régler le problème, il faut déréférer <code>pos_iter</code> à l’aide de l’opérateur <code>*</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> reachable_by_piece(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> y<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    map<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [[<span class="dt">bool</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">{</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">match</span> piece<span class="op">.</span>t <span class="op">{</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            Pawn   <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            Knight <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>            Bishop <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>            Queen  <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>            King   <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>            Rook <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> pos_iter <span class="kw">in</span> <span class="op">&amp;</span><span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>axes() <span class="op">{</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(<span class="op">*</span>pos_iter<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On fait la même chose pour le Fou et la Reine.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> reachable_by_piece(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> y<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    map<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [[<span class="dt">bool</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">{</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">match</span> piece<span class="op">.</span>t <span class="op">{</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>            Pawn   <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>            Knight <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            King   <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>            Rook <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> pos_iter <span class="kw">in</span> <span class="op">&amp;</span><span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>axes() <span class="op">{</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(<span class="op">*</span>pos_iter<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>            Bishop <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> pos_iter <span class="kw">in</span> <span class="op">&amp;</span><span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>diagonals() <span class="op">{</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(<span class="op">*</span>pos_iter<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>            Queen <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> pos_iter <span class="kw">in</span> <span class="op">&amp;</span><span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>axes() <span class="op">{</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(<span class="op">*</span>pos_iter<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> pos_iter <span class="kw">in</span> <span class="op">&amp;</span><span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>diagonals() <span class="op">{</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(<span class="op">*</span>pos_iter<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Maintenant on aimerait s’occuper du Roi et on aimerait récupérer ce qu’on a fait pour la Reine, car après tout, le roi se déplace comme la reine mais est limité à une case de distance. Hors, il y a la méthode <code>take</code> sur les itérateurs qui permet de les limiter.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> reachable_by_piece(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> y<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    map<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [[<span class="dt">bool</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">{</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">match</span> piece<span class="op">.</span>t <span class="op">{</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>            Pawn   <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>            Knight <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>            King <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> pos_iter <span class="kw">in</span> <span class="op">&amp;</span><span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>axes() <span class="op">{</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(<span class="op">*</span>pos_iter<span class="op">.</span>take(<span class="dv">1</span>)<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                    <span class="co">//                         ^^^^^^^^^^^^^^^^^ERROR</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> pos_iter <span class="kw">in</span> <span class="op">&amp;</span><span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>diagonals() <span class="op">{</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(<span class="op">*</span>pos_iter<span class="op">.</span>take(<span class="dv">1</span>)<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>                    <span class="co">//                         ^^^^^^^^^^^^^^^^^ERROR</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>            <span class="co">// on a déjà implémenté ceux qui suivent mais pour</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>            <span class="co">// éviter que le code soit trop long, je retire</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>            <span class="co">// ce qui ne concerne pas les explications</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>            Rook <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>            Bishop <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>            Queen <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Il n’y a plus besoins de déréférencer <code>pos_iter</code> car l’opérateur <code>.</code> le fait automatiquement.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> reachable_by_piece(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> y<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    map<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [[<span class="dt">bool</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">{</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">match</span> piece<span class="op">.</span>t <span class="op">{</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>            Pawn   <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>            Knight <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>            King <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> pos_iter <span class="kw">in</span> <span class="op">&amp;</span><span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>axes() <span class="op">{</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(pos_iter<span class="op">.</span>take(<span class="dv">1</span>)<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                    <span class="co">//                         ^^^^^^^^^^^^^^^^ERROR</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> pos_iter <span class="kw">in</span> <span class="op">&amp;</span><span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>diagonals() <span class="op">{</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(pos_iter<span class="op">.</span>take(<span class="dv">1</span>)<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>                    <span class="co">//                         ^^^^^^^^^^^^^^^^ERROR</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>            Rook <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>            Bishop <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>            Queen <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Le compilateur n’est toujours pas content, il se plein que le type attendu est <code>PosIter</code> mais que celui passé est <code>Take&lt;PosIter&gt;</code>. En effet, la méthode <code>take</code> d’un itérateur fonctionne en envelopant l’itérateur dans un autre itérateur. On va changer le prototype de la fonction <code>reachable_by_pos_iter</code> de sorte qu’elle soit générique sur tout itérateur de position <code>(usize, usize)</code>.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> reachable_by_pos_iter<span class="op">&lt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    T<span class="op">:</span> <span class="bu">Iterator</span><span class="op">&lt;</span> Item<span class="op">=</span>(<span class="dt">usize</span><span class="op">,</span> <span class="dt">usize</span>) <span class="op">&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span>    <span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    pos_iter<span class="op">:</span> T<span class="op">,</span>           <span class="co">// on remplace `PosIter` par `T`</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    player  <span class="op">:</span> Color<span class="op">,</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    map     <span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [[<span class="dt">bool</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>) <span class="op">{</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> (x<span class="op">,</span> y) <span class="kw">in</span> pos_iter <span class="op">{</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(p) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> p<span class="op">.</span>c <span class="op">!=</span> player <span class="op">{</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>                map[y][x] <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>            <span class="kw">break</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>            map[y][x] <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Maintenant <code>reachable_by_pos_iter</code> accèpte le type <code>Take&lt;PosIter&gt;</code>. Cependant, la contrainte ne fait que garantir que l’itèrateur génère des <code>(usize, usize)</code> mais pas que ce soit des positions valides, on n’a pas de garantie que les deux entiers soit compris entre <code>0</code> et <code>8</code> exclu. L’idéal serait de créer un type <code>Coords</code> garantissant la validité des coordonnés, mais on ne s’embetera pas avec ça.</p>
+<p>On peut maintenant s’attaquer au déplacements du cavalier.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> reachable_by_piece(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> y<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    map<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [[<span class="dt">bool</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">{</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">match</span> piece<span class="op">.</span>t <span class="op">{</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>            Pawn   <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>            Knight <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> pos_iter <span class="kw">in</span> <span class="op">&amp;</span><span class="pp">PosIter::</span>new(x<span class="op">,</span> y)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>north()<span class="op">.</span>north()<span class="op">.</span>est()<span class="op">.</span>radials()</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>                <span class="op">{</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(pos_iter<span class="op">.</span>take(<span class="dv">1</span>)<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> pos_iter <span class="kw">in</span> <span class="op">&amp;</span><span class="pp">PosIter::</span>new(x<span class="op">,</span> y)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>north()<span class="op">.</span>north()<span class="op">.</span>west()<span class="op">.</span>radials()</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>                <span class="op">{</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>reachable_by_pos_iter(pos_iter<span class="op">.</span>take(<span class="dv">1</span>)<span class="op">,</span> piece<span class="op">.</span>c<span class="op">,</span> map)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>            King <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>            Rook <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>            Bishop <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>            Queen <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On crée deux mouvements Nord Nord Est et Nord Nord Ouest et on génère les quatres symétries radiales (rotations à 90 degrés). On limite à <code>1</code> le nombre d’itération.</p>
+<p>Et pour finir, on s’attaque aux déplacements du pion. On crée deux variables qui dépendent de la couleur du pion, un itérateur de position orienté soit vers le Nord, soit vers le Sud et la ligne de pépart.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> reachable_by_piece(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> y<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    map<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [[<span class="dt">bool</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">{</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">match</span> piece<span class="op">.</span>t <span class="op">{</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>            Pawn <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> (pos_iter<span class="op">,</span> start) <span class="op">=</span> <span class="kw">match</span> p<span class="op">.</span>c <span class="op">{</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>                    Black <span class="op">=&gt;</span> <span class="op">{</span>(<span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>south()<span class="op">,</span> <span class="dv">1</span>)<span class="op">}</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>                    White <span class="op">=&gt;</span> <span class="op">{</span>(<span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>north()<span class="op">,</span> <span class="dv">6</span>)<span class="op">}</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>                <span class="op">};</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>                <span class="pp">unimplemented!</span>()</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>            Knight <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>            King <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>            Rook <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>            Bishop <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>            Queen <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On ne pourra pas utiliser <code>reachable_by_pos_iter</code> car le Pion se comporte différemment des autres pièces, il ne peut pas manger par l’avant, et ne peut aller sur les cotés que en mangeant.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> reachable_by_piece(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> y<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    map<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [[<span class="dt">bool</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">{</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">match</span> piece<span class="op">.</span>t <span class="op">{</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>            Pawn <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> (pos_iter<span class="op">,</span> start) <span class="op">=</span> <span class="kw">match</span> p<span class="op">.</span>c <span class="op">{</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>                    Black <span class="op">=&gt;</span> <span class="op">{</span>(<span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>south()<span class="op">,</span> <span class="dv">1</span>)<span class="op">}</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>                    White <span class="op">=&gt;</span> <span class="op">{</span>(<span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>north()<span class="op">,</span> <span class="dv">6</span>)<span class="op">}</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>                <span class="op">};</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> (x<span class="op">,</span> y) <span class="kw">in</span> pos_iter<span class="op">.</span>take(<span class="dv">1</span> <span class="op">+</span> (y <span class="op">==</span> start) <span class="kw">as</span> <span class="dt">usize</span>) <span class="op">{</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>board[y][x]<span class="op">.</span>is_some() <span class="op">{</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>                    map[y][x] <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>                <span class="pp">unimplemented!</span>()</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>            Knight <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>            King <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>            Rook <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>            Bishop <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>            Queen <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On limite à <code>1</code> itération sauf si la pièce est sur la ligne de départ, dans ce cas la limite est à <code>2</code> (on converti un <code>bool</code> en <code>usize</code>, ce qui donne <code>false</code>=&gt;<code>0</code> et <code>true</code>=&gt;<code>1</code>). On s’assure qu’il n’y est pas de pièces car le pion ne peu pas manger par l’avant.</p>
+<p>Maintenant on test les déplacements an biais du pion.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> reachable_by_piece(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span> y<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    map<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [[<span class="dt">bool</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">{</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">match</span> piece<span class="op">.</span>t <span class="op">{</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>            Pawn <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> (pos_iter<span class="op">,</span> start) <span class="op">=</span> <span class="kw">match</span> p<span class="op">.</span>c <span class="op">{</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>                    Black <span class="op">=&gt;</span> <span class="op">{</span>(<span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>south()<span class="op">,</span> <span class="dv">1</span>)<span class="op">}</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>                    White <span class="op">=&gt;</span> <span class="op">{</span>(<span class="pp">PosIter::</span>new(x<span class="op">,</span> y)<span class="op">.</span>north()<span class="op">,</span> <span class="dv">6</span>)<span class="op">}</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>                <span class="op">};</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> (x<span class="op">,</span> y) <span class="kw">in</span> pos_iter<span class="op">.</span>take(<span class="dv">1</span> <span class="op">+</span> (y <span class="op">==</span> start) <span class="kw">as</span> <span class="dt">usize</span>) <span class="op">{</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> <span class="kw">self</span><span class="op">.</span>board[y][x]<span class="op">.</span>is_some() <span class="op">{</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">break</span><span class="op">;</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>                    map[y][x] <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>((x<span class="op">,</span> y)) <span class="op">=</span> pos_iter<span class="op">.</span>est()<span class="op">.</span>next() <span class="op">{</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(dst_piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">if</span> dst_piece<span class="op">.</span>c <span class="op">!=</span> piece<span class="op">.</span>c <span class="op">{</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>                            map[y][x] <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>((x<span class="op">,</span> y)) <span class="op">=</span> pos_iter<span class="op">.</span>west()<span class="op">.</span>next() <span class="op">{</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(dst_piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>                        <span class="kw">if</span> dst_piece<span class="op">.</span>c <span class="op">!=</span> piece<span class="op">.</span>c <span class="op">{</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>                            map[y][x] <span class="op">=</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>            Knight <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>            King <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>            Rook <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>            Bishop <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>            Queen <span class="op">=&gt;</span> <span class="pp">unimplemented!</span>()<span class="op">,</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="progression">Progression</h2>
+<p>Retrouves dans le fichier <a href="https://gitlab.com/uben0/rust-tutoriel-fr/-/raw/master/43/main.rs"><code>main.rs</code></a> le projet.</p>
+    </body>
+</html>

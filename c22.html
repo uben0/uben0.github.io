@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+22
+" class="index-link">← retour</a>
+<h1 id="les-traits">Les traits</h1>
+<p>Le concept de <code>trait</code> est le plus important en Rust, tout s’articule autour. Le concept de <code>trait</code> permet de coder comme si le langage Rust était un langage de haut niveau sans qu’il le soit.</p>
+<p>Un <code>trait</code> représente une <strong>abilité</strong> que certains types peuvent avoir.</p>
+<p>Par exemple, l’entré standard (STDIN), les fichiers, les sockets, et d’autres, sont des types dont on peut lire des octets. On aimerai avoir une abstraction sur cette propriété, de cette façon, des bouts de code pourraient manipuler des types inconnus mais dont on sait qu’on peut lire des octets:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> read_and_print(input<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">dyn</span> <span class="bu">Read</span>) <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> buffer <span class="op">=</span> [<span class="dv">0u8</span><span class="op">;</span> <span class="dv">10</span>]<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    input<span class="op">.</span>read(<span class="op">&amp;</span><span class="kw">mut</span> buffer)<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> buffer)<span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Cette fonction lit jusqu’à <code>10</code> octets et affiche le <code>buffer</code>.</p>
+<p>Elle prend une référence vers le type <code>dyn Read</code>, ça signifie que le type est inconnu mais on sait qu’il implémente le trait <code>Read</code> définit comme suit :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">trait</span> <span class="bu">Read</span> <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> read(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> buf<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [<span class="dt">u8</span>]) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Le trait <code>Read</code> est définit dans la bibliothèque standard.</p>
+<p>On peut voir un <code>trait</code> comme une interface standardisé que des types peuvent adopter et ainsi permettre à des bouts de codes de les utiliser sans avoir à connaître leur type.</p>
+<h2 id="créons-un-trait">Créons un trait</h2>
+<p>Reprenons les structures <code>Point</code> et <code>Cercle</code>, et déclarons d’autres formes tel que le rectangle et le triangle:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="bu">Copy</span><span class="at">)]</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Point <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    y<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="bu">Copy</span><span class="at">)]</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Cercle <span class="op">{</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    centre<span class="op">:</span> Point<span class="op">,</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    rayon<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="bu">Copy</span><span class="at">)]</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Rectangle <span class="op">{</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    centre<span class="op">:</span> Point<span class="op">,</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    largeur<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    hauteur<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="bu">Copy</span><span class="at">)]</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Triangle <span class="op">{</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    a<span class="op">:</span> Point<span class="op">,</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    b<span class="op">:</span> Point<span class="op">,</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    c<span class="op">:</span> Point<span class="op">,</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On aimerait pouvoir intéragir sans distinction entre eux quand on ne s’intéresse qu’à l’idée de forme, par exemple, une forme peut-être déplacé, elle a une aire, un périmetre, elle peut être dessinée, etc…</p>
+<p>Déclarons le trait <code>Forme</code> décrivant comment intéragir avec un type représentant une forme.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">trait</span> Forme <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> deplace(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">Self</span><span class="op">,</span> dx<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span> dy<span class="op">:</span> <span class="dt">f64</span>)<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> aire(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="dt">f64</span><span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> perimetre(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="dt">f64</span><span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On peut voir des prototypes de fonction, elle n’ont pas de corps. Un <code>trait</code> explique comment intéragir avec une valeur de type inconnu, à partir du moment où elle implémente ce <code>trait</code>. Cette intéraction se fait à travers des appels de fonction. On remarque que le type de <code>self</code> est une référence sur <code>Self</code>, qui est le type inconnu en question.</p>
+<h2 id="implémentons-notre-trait">Implémentons notre trait</h2>
+<p>Implémentons <code>Forme</code> sur <code>Cercle</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Forme <span class="kw">for</span> Cercle <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> deplace(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Cercle<span class="op">,</span> dx<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span> dy<span class="op">:</span> <span class="dt">f64</span>) <span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>centre<span class="op">.</span>deplace(dx<span class="op">,</span> dy)<span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> aire(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Cercle) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> <span class="kw">self</span><span class="op">.</span>rayon <span class="op">*</span> <span class="kw">self</span><span class="op">.</span>rayon <span class="op">*</span> <span class="dv">3.14159</span><span class="op">;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> perimetre(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Cercle) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> <span class="dv">2.0</span> <span class="op">*</span> <span class="kw">self</span><span class="op">.</span>rayon <span class="op">*</span> <span class="dv">3.14159</span><span class="op">;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On reprend les prototypes de fonction dans la défénition de <code>Forme</code> et on leur écrit un corps correspondant. On peut maintenant utiliser ces fonctions sur <code>Cercle</code> tel des méthodes:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="kw">mut</span> c <span class="op">=</span> Cercle <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    centre<span class="op">:</span> Point <span class="op">{</span> x<span class="op">:</span> <span class="dv">0.0</span><span class="op">,</span> y<span class="op">:</span> <span class="dv">1.0</span> <span class="op">},</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    rayon<span class="op">:</span> <span class="dv">4.0</span><span class="op">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>c<span class="op">.</span>deplace(<span class="dv">3.0</span><span class="op">,</span> <span class="dv">2.0</span>)<span class="op">;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;aire: {}&quot;</span><span class="op">,</span> c<span class="op">.</span>aire())<span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;perimetre: {}&quot;</span><span class="op">,</span> c<span class="op">.</span>perimetre())<span class="op">;</span></span></code></pre></div>
+<p>Mais l’intérêt est d’implémenter un <code>trait</code> sur plusieurs types. Alors nous allons implémenter <code>Forme</code> sur <code>Rectangle</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Forme <span class="kw">for</span> Rectangle <span class="op">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> deplace(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Rectangle<span class="op">,</span> dx<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span> dy<span class="op">:</span> <span class="dt">f64</span>) <span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>centre<span class="op">.</span>deplace(dx<span class="op">,</span> dy)<span class="op">;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> aire(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Rectangle) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> <span class="kw">self</span><span class="op">.</span>largeur <span class="op">*</span> <span class="kw">self</span><span class="op">.</span>hauteur<span class="op">;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> perimetre(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Rectangle) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> <span class="dv">2.0</span> <span class="op">*</span> (<span class="kw">self</span><span class="op">.</span>largeur <span class="op">+</span> <span class="kw">self</span><span class="op">.</span>hauteur)<span class="op">;</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Et on l’implémente sur <code>Triangle</code> aussi:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Forme <span class="kw">for</span> Triangle <span class="op">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> deplace(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Triangle<span class="op">,</span> dx<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span> dy<span class="op">:</span> <span class="dt">f64</span>) <span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>a<span class="op">.</span>deplace(dx<span class="op">,</span> dy)<span class="op">;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>b<span class="op">.</span>deplace(dx<span class="op">,</span> dy)<span class="op">;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>c<span class="op">.</span>deplace(dx<span class="op">,</span> dy)<span class="op">;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> aire(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Triangle) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> ab <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>a<span class="op">.</span>distance(<span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>b)<span class="op">;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> bc <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>b<span class="op">.</span>distance(<span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>c)<span class="op">;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> ca <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>c<span class="op">.</span>distance(<span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>a)<span class="op">;</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> s <span class="op">=</span> (ab <span class="op">+</span> bc <span class="op">+</span> ca) <span class="op">/</span> <span class="dv">2.0</span><span class="op">;</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> <span class="dt">f64</span><span class="pp">::</span>sqrt(s <span class="op">*</span> (s <span class="op">-</span> ab) <span class="op">*</span> (s <span class="op">-</span> bc) <span class="op">*</span> (s <span class="op">-</span> ca))<span class="op">;</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> perimetre(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Triangle) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>a<span class="op">.</span>distance(<span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>b) <span class="op">+</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>b<span class="op">.</span>distance(<span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>c) <span class="op">+</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>c<span class="op">.</span>distance(<span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>a)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        <span class="op">;</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="abstraction">Abstraction</h2>
+<p>Maintenant, imaginons une fonction prenant deux formes et retournant le périmètre de celle qui a la plus grande aire:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> perimetre_pga(a<span class="op">:</span> <span class="op">&amp;</span><span class="kw">dyn</span> Forme<span class="op">,</span> b<span class="op">:</span> <span class="op">&amp;</span><span class="kw">dyn</span> Forme) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> a<span class="op">.</span>aire() <span class="op">&gt;</span> b<span class="op">.</span>aire() <span class="op">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> a<span class="op">.</span>perimetre()<span class="op">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> b<span class="op">.</span>perimetre()<span class="op">;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Le type <code>&amp;dyn Forme</code> est un pointeur lourd, ce pointeur lourd est composé en fait de deux pointeurs différents, un qui pointe vers la variable de type inconnu, et l’autre vers son implémentation du trait <code>Forme</code>. Ce que l’on appelle “son implémentation de <code>Forme</code>” est une table contenant les fonctions du trait <code>Forme</code> implémentées pour ce type inconnu. La fonction <code>perimetre_pga</code> n’a pas besoins de connaître le type qui se cache derrière <code>a</code> ou <code>b</code>, puisque le pointeur lourd donne accès aux fonctions qui permettent d’intéragir avec.</p>
+<pre><code> poiteur lourd       valeur de type et de taille inconnu
+▄┏━━━━━━━━━┓         ┌─── ─ ─           ─ ─ ───┐
+█┃ 0x7f004 ┣━━╺╺╺╺╺╺◆│ self                    │
+█┣━━━━━━━━━┫         └─── ─ ─           ─ ─ ───┘
+█┃ 0x7f0f6 ┣━┓
+▀┗━━━━━━━━━┛ ┃       table avec adresses des fonctions du trait
+             ┃       ┏━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┓
+             ┗╺╺╺╺╺╺◆┃ 0x100f6 ┃ 0x1040b ┃ 0x102c0 ┃
+                     ┗━━━━┳━━━━┻━━━━┳━━━━┻━━━━┳━━━━┛
+         ┏╺╺╺╺╺╺╺╺╺╺╺╺╺╺╺╺┛  ┏╺╺╺╺╺╺┛         ┗╺╺┓
+         ◆                   ◆                   ◆
+┌────────────────┐  ┌────────────────┐  ┌────────────────┐
+│ fn deplace()   │  │ fn aire()      │  │ fn perimetre() │
+╷                ╷  ╷                ╷  ╷                ╷
+╷                ╷  ╷                ╷  ╷                ╷
+╷                ╷  ╷                ╷  ╷                ╷
+└─ ─  ─    ─  ─ ─┘  └─ ─  ─    ─  ─ ─┘  └─ ─  ─    ─  ─ ─┘</code></pre>
+<p>Pour mieux comprendre ce qui se passe, ajoutons un <code>println</code> dans les implémentation de <code>Forme</code> par <code>Cercle</code> et <code>Rectangle</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Forme <span class="kw">for</span> Rectangle <span class="op">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> deplace(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Rectangle<span class="op">,</span> dx<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span> dy<span class="op">:</span> <span class="dt">f64</span>) <span class="op">{</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;rectangle_deplace&quot;</span>)<span class="op">;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>centre<span class="op">.</span>deplace(dx<span class="op">,</span> dy)<span class="op">;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> aire(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Rectangle) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;rectangle_aire&quot;</span>)<span class="op">;</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> <span class="kw">self</span><span class="op">.</span>largeur <span class="op">*</span> <span class="kw">self</span><span class="op">.</span>hauteur<span class="op">;</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> perimetre(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Rectangle) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;rectangle_perimetre&quot;</span>)<span class="op">;</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> <span class="dv">2.0</span> <span class="op">*</span> (<span class="kw">self</span><span class="op">.</span>largeur <span class="op">+</span> <span class="kw">self</span><span class="op">.</span>hauteur)<span class="op">;</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Forme <span class="kw">for</span> Cercle <span class="op">{</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> deplace(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Cercle<span class="op">,</span> dx<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span> dy<span class="op">:</span> <span class="dt">f64</span>) <span class="op">{</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;cercle_deplace&quot;</span>)<span class="op">;</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>centre<span class="op">.</span>deplace(dx<span class="op">,</span> dy)<span class="op">;</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> aire(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Cercle) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;cercle_aire&quot;</span>)<span class="op">;</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> <span class="kw">self</span><span class="op">.</span>rayon <span class="op">*</span> <span class="kw">self</span><span class="op">.</span>rayon <span class="op">*</span> <span class="dv">3.14159</span><span class="op">;</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> perimetre(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Cercle) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;cercle_perimetre&quot;</span>)<span class="op">;</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> <span class="dv">2.0</span> <span class="op">*</span> <span class="kw">self</span><span class="op">.</span>rayon <span class="op">*</span> <span class="dv">3.14159</span><span class="op">;</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Maintenant testons <code>perimetre_pga</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> c <span class="op">=</span> Cercle <span class="op">{</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    centre<span class="op">:</span> Point <span class="op">{</span> x<span class="op">:</span> <span class="dv">0.0</span><span class="op">,</span> y<span class="op">:</span> <span class="dv">1.0</span> <span class="op">},</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    rayon<span class="op">:</span> <span class="dv">4.0</span><span class="op">,</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> r <span class="op">=</span> Rectangle <span class="op">{</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    centre<span class="op">:</span> Point <span class="op">{</span> x<span class="op">:</span> <span class="dv">3.0</span><span class="op">,</span> y<span class="op">:</span> <span class="dv">2.0</span><span class="op">},</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    largeur<span class="op">:</span> <span class="dv">10.0</span><span class="op">,</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    hauteur<span class="op">:</span> <span class="dv">4.0</span><span class="op">,</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> p <span class="op">=</span> perimetre_pga(<span class="op">&amp;</span>c<span class="op">,</span> <span class="op">&amp;</span>r)<span class="op">;</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{}&quot;</span><span class="op">,</span> p)<span class="op">;</span></span></code></pre></div>
+<pre><code>cercle_aire
+rectangle_aire
+cercle_perimetre
+25.13272</code></pre>
+<p>On obeserve que les fonctions correspondant au type ont été appelées, c’est grâce aux pointeurs lourds <code>&amp;dyn Forme</code>.</p>
+<h2 id="debug-clone-copy">Debug, Clone, Copy</h2>
+<p>La capacité d’un type à s’afficher en détails dans un terminal est décrit par le trait <code>Debug</code>. La capacité d’un type à se cloner (se dédoubler) est décrit par le trait <code>Clone</code>.</p>
+<p>Les traits <code>Debug</code>, <code>Clone</code> et <code>Copy</code> peuvent être implémentés automatiquement pour les structures, on a pas besoins de le faire à la main. On utilise la directive <code>#[derive()]</code> pour le faire automatiquement.</p>
+<p>Le trait <code>Copy</code> est juste un trait marqueur, en fait, il ne nécessite qu’aucune fonction soit implémentée pour qu’un type l’implémente, si ce n’est que ce type doit implémenter le trait <code>Clone</code>. Il sert uniquement à indiquer que si un type l’implémente, alors cloner ce type n’est pas une opération couteuse.</p>
+    </body>
+</html>

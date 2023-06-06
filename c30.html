@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+30
+" class="index-link">← retour</a>
+<h1 id="les-génériques">Les génériques</h1>
+<p>Parfois on souhaite écrire du code sans connaitre à l’avance certains types. Dans ce cas, on peut faire une abstraction du type en question et on dit que notre code est générique.</p>
+<h2 id="types-génériques">Types génériques</h2>
+<p>Par exemples, si l’on reprend notre structure <code>Point</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Point<span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>On souhaite qu’il soit générique sur le type des coordonnées, que l’on ne soit pas limité à <code>f64</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Point<span class="op">&lt;</span>T<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">:</span> T<span class="op">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">:</span> T<span class="op">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Déclarons une variable <code>p</code> de type <code>Point&lt;i32&gt;</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> p<span class="op">:</span> Point<span class="op">&lt;</span><span class="dt">i32</span><span class="op">&gt;</span> <span class="op">=</span> Point<span class="op">&lt;</span><span class="dt">i32</span><span class="op">&gt;{</span>x<span class="op">:</span> <span class="dv">0</span><span class="op">,</span> y<span class="op">:</span> <span class="dv">10</span><span class="op">};</span> <span class="co">// ERROR</span></span></code></pre></div>
+<p>Le compilateur se pleins car il croit que l’on souhaite faire une comparaison <code>Point &lt; i32</code>. Malheureusement, même si pour un humain, il est clair que ce n’est pas une comparaison mais un générique, syntaxiquement parlant, ce n’est pas différenciable d’une comparaison <code>a &lt; b</code>. C’est pourquoi il faut utiliser une notation appelé <strong>turbo fish</strong> (<code>::&lt;</code>).</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> p<span class="op">:</span> Point<span class="op">&lt;</span><span class="dt">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="pp">Point::</span><span class="op">&lt;</span><span class="dt">i32</span><span class="op">&gt;{</span>x<span class="op">:</span> <span class="dv">0</span><span class="op">,</span> y<span class="op">:</span> <span class="dv">10</span><span class="op">};</span></span></code></pre></div>
+<p>Grâce à la déduction du type, on peut racourcir la déclaration.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> p <span class="op">=</span> Point<span class="op">{</span>x<span class="op">:</span> <span class="dv">0</span><span class="op">,</span> y<span class="op">:</span> <span class="dv">10</span><span class="op">};</span></span></code></pre></div>
+<h2 id="fonctions-génériques">Fonctions génériques</h2>
+<p>Implémentons une fonction <code>carre</code> qui calcule le carré d’un nombre:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> carre(x<span class="op">:</span> <span class="dt">f64</span>) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> x <span class="op">*</span> x<span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Cette fonction prend une valeur de type <code>f64</code> et retourne une valeur de type <code>f64</code>. Si on veut une fonction <code>carre</code> pour le type <code>i32</code> alors il faudrait déclarer plusieurs fonctions:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> carre_f64(x<span class="op">:</span> <span class="dt">f64</span>) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> x <span class="op">*</span> x<span class="op">;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> carre_i32(x<span class="op">:</span> <span class="dt">i32</span>) <span class="op">-&gt;</span> <span class="dt">i32</span> <span class="op">{</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> x <span class="op">*</span> x<span class="op">;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Il faudrait faire de même pour tous les types avec lesquels on peut être amené à calculer le carré. Ce n’est pas élégant de faire ainsi. Heuresement, il y a une façon d’harmoniser cela, <strong>les génériques</strong>. On abstrait le type de <code>x</code> sous le nom de <code>T</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> carre<span class="op">&lt;</span>T<span class="op">&gt;</span>(x<span class="op">:</span> T) <span class="op">-&gt;</span> T <span class="op">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> x <span class="op">*</span> x<span class="op">;</span> <span class="co">// ERROR</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Seulement voilà, le compilateur ne connaissant pas le type de <code>x</code>, il ignore si ce dernier peut être multiplié. Il faut savoir que les types capables de se multiplier implémentent un <code>trait</code> nomé <code>Mul</code>. Il faut donc restreindre le type <code>T</code> à ne pouvoir être qu’un type implémentant <code>Mul</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> carre<span class="op">&lt;</span>T<span class="op">:</span> <span class="pp">std::ops::</span><span class="bu">Mul</span> <span class="op">&gt;</span>(x<span class="op">:</span> T) <span class="op">-&gt;</span> T <span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> x <span class="op">*</span> x<span class="op">;</span> <span class="co">// ERROR</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Le compilateur se pleins, mais cette fois-ci, il peut être difficile de comprendre pourquoi. En effet le trait <code>Mul</code> a besoins qu’on lui spécifie le type de retour de la multiplication via un parametre générique appelé <code>Output</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> carre<span class="op">&lt;</span>T<span class="op">:</span> <span class="pp">std::ops::</span><span class="bu">Mul</span><span class="op">&lt;</span>Output<span class="op">=</span>T<span class="op">&gt;</span> <span class="op">&gt;</span>(x<span class="op">:</span> T) <span class="op">-&gt;</span> T <span class="op">{</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> x <span class="op">*</span> x<span class="op">;</span> <span class="co">// ERROR</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Le compilateur se pleins encore, cette fois ci, c’est à cause de la deuxième utilisation de <code>x</code>, le compilateur dit que <code>x</code> n’est plus valide car il a été déplacé. Pour comprendre pourquoi <code>x</code> est déplacé, le mieux est de voir ce que cache l’opérateur <code>*</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> carre<span class="op">&lt;</span>T<span class="op">:</span> <span class="pp">std::ops::</span><span class="bu">Mul</span><span class="op">&lt;</span>Output<span class="op">=</span>T<span class="op">&gt;</span> <span class="op">&gt;</span>(x<span class="op">:</span> T) <span class="op">-&gt;</span> T <span class="op">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> <span class="pp">T::</span>mul(x<span class="op">,</span> x)<span class="op">;</span> <span class="co">// ERROR</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>En effet, implémenter le trait <code>Mul</code> signifie avoir une fonction associé appelée <code>mul</code> et c’est cette fonction qui est appelé lorsque l’on utilise l’opérateur <code>*</code>. Hors, la variable <code>x</code> est déplacée lorsqu’on la place en tant que premier paramètre de <code>mul</code>. L’idéal serait que <code>x</code> soit un type copiable. On peut rajouter cette contrainte pour résoudre le problème:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> carre<span class="op">&lt;</span>T<span class="op">:</span> <span class="pp">std::ops::</span><span class="bu">Mul</span><span class="op">&lt;</span>Output<span class="op">=</span>T<span class="op">&gt;</span> <span class="op">+</span> <span class="bu">Copy</span><span class="op">&gt;</span>(x<span class="op">:</span> T) <span class="op">-&gt;</span> T <span class="op">{</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> <span class="pp">T::</span>mul(x<span class="op">,</span> x)<span class="op">;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Enfin, le code compile. Ce peut être décourageant de devoir se confronter à tant de complexité pour faire quelque chose d’aussi simple. Heuresement, on est rarement confronté à ce genre de situation, si j’ai choisi cette situation, c’est parce qu’elle montre bien l’idée derrière les génériques.</p>
+<h2 id="mot-clé-where">Mot clé <code>where</code></h2>
+<p>Il existe une notation pour rendre plus lisible les génériques en utilisant le mot clé <code>where</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> carre<span class="op">&lt;</span>T<span class="op">&gt;</span>(x<span class="op">:</span> T) <span class="op">-&gt;</span> T</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">where</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    T<span class="op">:</span> <span class="pp">std::ops::</span><span class="bu">Mul</span><span class="op">&lt;</span>Output<span class="op">=</span>T<span class="op">&gt;,</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    T<span class="op">:</span> <span class="bu">Copy</span><span class="op">,</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> <span class="pp">T::</span>mul(x<span class="op">,</span> x)<span class="op">;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="fonction-générique-ou-dynamique">Fonction générique ou dynamique</h2>
+<p>Reprenons notre fonction <code>perimetre_pga</code>:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> perimetre_pga(a<span class="op">:</span> <span class="op">&amp;</span><span class="kw">dyn</span> Forme<span class="op">,</span> b<span class="op">:</span> <span class="op">&amp;</span><span class="kw">dyn</span> Forme) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> a<span class="op">.</span>aire() <span class="op">&gt;</span> b<span class="op">.</span>aire() <span class="op">{</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> a<span class="op">.</span>perimetre()<span class="op">;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> b<span class="op">.</span>perimetre()<span class="op">;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Cette fonction utilise des pointeurs <code>&amp;dyn</code>, c’est ce qui lui permet de manipuler des types non déterminés, mais on peut transformer cette fonction pour qu’elle utilise des types génériques.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> perimetre_pga<span class="op">&lt;</span>T<span class="op">,</span> U<span class="op">&gt;</span>(a<span class="op">:</span> <span class="op">&amp;</span>T<span class="op">,</span> b<span class="op">:</span> <span class="op">&amp;</span>U) <span class="op">-&gt;</span> <span class="dt">f64</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">where</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    T<span class="op">:</span> Forme<span class="op">,</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    U<span class="op">:</span> Forme<span class="op">,</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> a<span class="op">.</span>aire() <span class="op">&gt;</span> b<span class="op">.</span>aire() <span class="op">{</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> a<span class="op">.</span>perimetre()<span class="op">;</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> b<span class="op">.</span>perimetre()<span class="op">;</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Les deux techniques cohabitent parfaitements.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> perimetre_pga<span class="op">&lt;</span>T<span class="op">&gt;</span>(a<span class="op">:</span> <span class="op">&amp;</span>T<span class="op">,</span> b<span class="op">:</span> <span class="op">&amp;</span><span class="kw">dyn</span> Forme) <span class="op">-&gt;</span> <span class="dt">f64</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">where</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    T<span class="op">:</span> Forme<span class="op">,</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> a<span class="op">.</span>aire() <span class="op">&gt;</span> b<span class="op">.</span>aire() <span class="op">{</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> a<span class="op">.</span>perimetre()<span class="op">;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> b<span class="op">.</span>perimetre()<span class="op">;</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Ici <code>a</code> est générique, alors que <code>b</code> est dynamique.</p>
+<p>La différence entre les deux, c’est que le générique est généré au moment de la compilation, c’est à dire que le type <code>T</code> de <code>a</code> est déterminé au moment où le code compile, alors que le type de <code>b</code> reste inconnu même quand le programme s’éxécute.</p>
+<h2 id="générique-mieux-que-dynamique">Générique mieux que dynamique</h2>
+<p>Essaye de ne pas utiliser de générique pour coder la fonction <code>carre</code> mais à la place des pointeurs <code>&amp;dyn</code>. Est-ce que tu as une idée de comment faire ? Malheureusement c’est impossible. Car la fonction <code>mul</code> prend ses deux paramêtres par valeur, hors, si on ne connais pas leur taille, c’est impossible.</p>
+<p>Avec les génériques, tous les types sont connus au moment de la compilations, ce qui laisse le champs libre au compilateur pour des optimisations plus poussés. En générale, le code générique est très performant.</p>
+<h2 id="magie-noire">Magie noire</h2>
+<p>La fonction <code>user_input</code> fournit dans ce tuto semble pouvoir retourner différents types. Cette fonction est en fait générique, on pourrait la noter <code>user_input::&lt;i32&gt;()</code> pour récupérer un <code>i32</code>, mais avec la déduction du type, on peut omettre de spécifier le type générique. Il en va de même pour la fonction <code>rand::random()</code> qui peut se noter <code>rand::random::&lt;i32&gt;()</code>.</p>
+    </body>
+</html>

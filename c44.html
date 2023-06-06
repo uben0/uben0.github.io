@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+44
+" class="index-link">← retour</a>
+<h1 id="jeu-déchecs-6">Jeu d’échecs (6)</h1>
+<p>Créons une fonction <code>reachable_by_player</code> qui indique quelles cases sont atteignables par au moins une des pièces d’un joueur.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> reachable_by_player(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span> player<span class="op">:</span> Color<span class="op">,</span> map<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> [[<span class="dt">bool</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]) <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">8</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">8</span> <span class="op">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>            <span class="co">// pour toutes les pièces du plateau</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                <span class="co">// si elle apartient au joueur</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> piece<span class="op">.</span>c <span class="op">==</span> player <span class="op">{</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// on marque les cases qu&#39;elle peut atteindre</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>reachable_by_piece(x<span class="op">,</span> y<span class="op">,</span> map)<span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Créons une fonction <code>is_in_check</code> qui indique si un joueur donné est en échec.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> is_in_check(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span>Game<span class="op">,</span> player<span class="op">:</span> Color) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> map <span class="op">=</span> [[<span class="cn">false</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> oponent <span class="op">=</span> <span class="kw">match</span> player <span class="op">{</span>Black<span class="op">=&gt;</span>White<span class="op">,</span> White<span class="op">=&gt;</span>Black<span class="op">};</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// on marque les cases atteignables par l&#39;oposant</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">self</span><span class="op">.</span>reachable_by_player(oponent<span class="op">,</span> <span class="op">&amp;</span><span class="kw">mut</span> map)<span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> y <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">8</span> <span class="op">{</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> x <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">8</span> <span class="op">{</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>            <span class="co">// pour toute les pièces du plateau</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[y][x] <span class="op">{</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                <span class="co">// si elle apartient au joueur, que c&#39;est un Roi et qu&#39;elle est</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                <span class="co">// atteignable par l&#39;oposant, alors le joueur est en échec</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> map[y][x] <span class="op">&amp;&amp;</span> piece<span class="op">.</span>c <span class="op">==</span> player <span class="op">&amp;&amp;</span> piece<span class="op">.</span>t <span class="op">==</span> King <span class="op">{</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">return</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="cn">false</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Créons une fonction <code>move_piece</code> qui déplace une pièce sur le plateau sans prendre en compte si c’est un cou autorisé.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> move_piece(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Game<span class="op">,</span> m<span class="op">:</span> Move) <span class="op">-&gt;</span> <span class="dt">Option</span><span class="op">&lt;</span>Piece<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// si il y a une pièce à l&#39;emplacement d&#39;origine, on la prend</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[m<span class="op">.</span>src_y][m<span class="op">.</span>src_x]<span class="op">.</span>take() <span class="op">{</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="co">// et on la place à la destination, en retournant celle déjà présente</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="co">// si il y en a une</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>board[m<span class="op">.</span>dst_y][m<span class="op">.</span>dst_x]<span class="op">.</span>replace(piece)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="cn">None</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Les fonction <code>take</code> et <code>replace</code> sont des méthodes de <code>Option</code> définits dans la bibliothèque standard, n’hésite pas à consulter la documentation si elles te paraissent obscures.</p>
+<p>Et enfin, créons une fonction <code>play_move</code> qui joue un cou en vérifiant qu’il est autorisé.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> play_move(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Game<span class="op">,</span> m<span class="op">:</span> Move<span class="op">,</span> player<span class="op">:</span> Color) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[m<span class="op">.</span>src_y][m<span class="op">.</span>src_x] <span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">// la pièce doit appartenir au joueur</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> piece<span class="op">.</span>c <span class="op">==</span> player <span class="op">{</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> map <span class="op">=</span> [[<span class="cn">false</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>            <span class="co">// la case doit être atteignable</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>reachable_by_piece(m<span class="op">.</span>src_x<span class="op">,</span> m<span class="op">.</span>src_y<span class="op">,</span> <span class="op">&amp;</span><span class="kw">mut</span> map)<span class="op">;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> map[m<span class="op">.</span>dst_y][m<span class="op">.</span>dst_x] <span class="op">{</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                <span class="co">// on déplace la pièce</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                <span class="kw">self</span><span class="op">.</span>move_piece(m)<span class="op">;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                <span class="co">// on test si on est pas en échec</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> <span class="op">!</span><span class="kw">self</span><span class="op">.</span>is_in_check(player) <span class="op">{</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">return</span> <span class="cn">true</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>                <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// si on est en échec, il faut revenir en arrière</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">return</span> <span class="cn">false</span><span class="op">;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="cn">false</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Le problème est que pour tester si le joueur est en échec, il faut d’abord jouer le cou. Donc il faut pouvoir revenir en arrière si necessaire. Le plus simple est tester le coup sur une copie du jeu.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> play_move(<span class="kw">self</span><span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> Game<span class="op">,</span> m<span class="op">:</span> Move<span class="op">,</span> player<span class="op">:</span> Color) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="kw">let</span> <span class="cn">Some</span>(piece) <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>board[m<span class="op">.</span>src_y][m<span class="op">.</span>src_x] <span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> piece<span class="op">.</span>c <span class="op">==</span> player <span class="op">{</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> map <span class="op">=</span> [[<span class="cn">false</span><span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span> <span class="dv">8</span>]<span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>            <span class="kw">self</span><span class="op">.</span>reachable_by_piece(m<span class="op">.</span>src_x<span class="op">,</span> m<span class="op">.</span>src_y<span class="op">,</span> <span class="op">&amp;</span><span class="kw">mut</span> map)<span class="op">;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> map[m<span class="op">.</span>dst_y][m<span class="op">.</span>dst_x] <span class="op">{</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                <span class="co">// on clone le jeu</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> <span class="kw">mut</span> projection <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>clone()<span class="op">;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                projection<span class="op">.</span>move_piece(m)<span class="op">;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> <span class="op">!</span>projection<span class="op">.</span>is_in_check(player) <span class="op">{</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// on applique le cou sur le jeu d&#39;origine</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">self</span><span class="op">.</span>move_piece(m)<span class="op">;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">return</span> <span class="cn">true</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="cn">false</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="progression">Progression</h2>
+<p>Retrouves dans le fichier <a href="https://gitlab.com/uben0/rust-tutoriel-fr/-/raw/master/44/main.rs"><code>main.rs</code></a> le projet.</p>
+    </body>
+</html>

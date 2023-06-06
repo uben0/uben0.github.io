@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+11
+" class="index-link">← retour</a>
+<h1 id="tableaux">Tableaux</h1>
+<h2 id="déclarer-un-tableau">Déclarer un tableau</h2>
+<p>Déclarer un tableau d’entiers <code>u32</code> et de taille <code>5</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> tableau<span class="op">:</span> [<span class="dt">u32</span><span class="op">;</span> <span class="dv">5</span>] <span class="op">=</span> [<span class="dv">7</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">8</span>]<span class="op">;</span></span></code></pre></div>
+<p>Il est aussi possible de répéter une valeur :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> tableau<span class="op">:</span> [<span class="dt">u32</span><span class="op">;</span> <span class="dv">5</span>] <span class="op">=</span> [<span class="dv">0</span><span class="op">;</span> <span class="dv">5</span>]<span class="op">;</span></span></code></pre></div>
+<p>Ce qui équivaut à :</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> tableau<span class="op">:</span> [<span class="dt">u32</span><span class="op">;</span> <span class="dv">5</span>] <span class="op">=</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>]<span class="op">;</span></span></code></pre></div>
+<h2 id="accès">Accès</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> tableau<span class="op">:</span> [<span class="dt">u32</span><span class="op">;</span> <span class="dv">5</span>] <span class="op">=</span> [<span class="dv">7</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">8</span>]<span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> tableau[<span class="dv">0</span>]<span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> tableau[<span class="dv">3</span>]<span class="op">;</span></span></code></pre></div>
+<p>On accède à une valeur en donnant son indice.</p>
+<p>Un dépacement provoquera l’arrêt du programme (<em>panic</em>).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> tableau<span class="op">:</span> [<span class="dt">u32</span><span class="op">;</span> <span class="dv">5</span>] <span class="op">=</span> [<span class="dv">7</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">8</span>]<span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> tableau[<span class="dv">8</span>]<span class="op">;</span> <span class="co">// PANIC</span></span></code></pre></div>
+<h2 id="index">Index</h2>
+<p>Essaye d’indexer un tableau avec un entier qui n’est pas de type <code>usize</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> tableau<span class="op">:</span> [<span class="dt">u32</span><span class="op">;</span> <span class="dv">5</span>] <span class="op">=</span> [<span class="dv">7</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">8</span>]<span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> index<span class="op">:</span> <span class="dt">i16</span> <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> tableau[index]<span class="op">;</span> <span class="co">// ERROR</span></span></code></pre></div>
+<p>On ne peut indexer un tableau qu’avec une valeur de type <code>usize</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> tableau<span class="op">:</span> [<span class="dt">u32</span><span class="op">;</span> <span class="dv">5</span>] <span class="op">=</span> [<span class="dv">7</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">8</span>]<span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> index<span class="op">:</span> <span class="dt">usize</span> <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> tableau[index]<span class="op">;</span> <span class="co">// OK</span></span></code></pre></div>
+<h3 id="explication">Explication</h3>
+<p>Souviens toi, en Rust on ne mélange pas les types, hors, indexer un tableau revient à une addition entre son adresse de début et l’indice.</p>
+<p>En C ont aurait:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> tableau<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">7</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">8</span><span class="op">};</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> index <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="op">*(</span>tableau <span class="op">+</span> index<span class="op">);</span></span></code></pre></div>
+<p>Et en Rust le type <code>usize</code> est comme celui d’un pointeur (adresse mémoire), c’est à dire un entier positif de la taille de l’architecture du CPU (32 ou 64 bits).</p>
+    </body>
+</html>

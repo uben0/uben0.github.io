@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+04
+" class="index-link">← retour</a>
+<h1 id="variables">Variables</h1>
+<h2 id="déclaration-dune-variable">Déclaration d’une variable</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> ma_variable<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code></pre></div>
+<p>On a déclaré une variable appelée <code>ma_variable</code> de type <code>i32</code> ayant la valeur initial de <code>0</code>.</p>
+<h2 id="mutabilité">Mutabilité</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> ma_variable<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ma_variable <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="co">// ERROR</span></span></code></pre></div>
+<p>Par défaut, une variable n’est pas modifiable, on dit qu’elle n’est pas mutable. On peut corriger cela avec le mot clé <code>mut</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="kw">mut</span> ma_variable<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ma_variable <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="co">// OK</span></span></code></pre></div>
+<h2 id="nomenclature">Nomenclature</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> maVariable<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="co">// </span><span class="al">WARNING</span></span></code></pre></div>
+<p>Les variables doivent être nomé en <em>snake_case</em>. Si une autre convention est utilisée comme le <em>camelCase</em>, un avertissement est émit par le compilateur.</p>
+<h2 id="redéfinition">Redéfinition</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a<span class="op">:</span> <span class="dt">bool</span> <span class="op">=</span> <span class="cn">false</span><span class="op">;</span></span></code></pre></div>
+<p>Il est possible de déclarer une variable avec le même nom qu’une déjà déclarée avant, cela a pour effet de masquer la variable précédente.</p>
+    </body>
+</html>

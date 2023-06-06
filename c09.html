@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+09
+" class="index-link">← retour</a>
+<h1 id="bibliothèque">Bibliothèque</h1>
+<p>Beaucoup de types, de fonctions et d’autres éléments sond fournits de base avec le langage, on appelle ça la bibliothèque standard. Cependant, même ci cette dernière est très fournie, on est amené à un moment ou un autre à utiliser des bibliothèques externes. Heuresement, en Rust, utiliser une bibliothèque est très facile.</p>
+<h2 id="ajouter-une-biblihothèque">Ajouter une biblihothèque</h2>
+<p>On va utiliser la bibliothèque <code>rand</code>, cette dernière permet de générer des valeurs aléatoires. On utilisera la version <code>0.7</code> de cette dernière.</p>
+<p>Ouvrons le fichier <code>Cargo.toml</code>. Il devrait ressembler à ça :</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[package]</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">name </span><span class="ot">=</span><span class="st"> &quot;hello-world&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">version </span><span class="ot">=</span><span class="st"> &quot;</span><span class="dv">0</span><span class="st">.</span><span class="fl">1.0</span><span class="st">&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">authors </span><span class="ot">=</span><span class="st"> [&quot;user &lt;user@address.com&gt;&quot;]</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="dt">edition </span><span class="ot">=</span><span class="st"> &quot;</span><span class="dv">2018</span><span class="st">&quot;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">[dependencies]</span></span></code></pre></div>
+<p>Il suffit de rajouter sous <code>[dependencies]</code> la ligne <code>rand = "0.7"</code>, comme ceci :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[package]</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">name </span><span class="ot">=</span><span class="st"> &quot;hello-world&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">version </span><span class="ot">=</span><span class="st"> &quot;</span><span class="dv">0</span><span class="st">.</span><span class="fl">1.0</span><span class="st">&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">authors </span><span class="ot">=</span><span class="st"> [&quot;user &lt;user@address.com&gt;&quot;]</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">edition </span><span class="ot">=</span><span class="st"> &quot;</span><span class="dv">2018</span><span class="st">&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">[dependencies]</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="dt">rand </span><span class="ot">=</span><span class="st"> &quot;</span><span class="fl">0.7</span><span class="st">&quot;</span></span></code></pre></div>
+<p>Et voilà, c’est fait ! (et oui, c’est aussi simple que ça)</p>
+<p>On peu maintenant générer des valeurs aléatoires :</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> entier_aleatoir<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> <span class="pp">rand::</span>random()<span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{}&quot;</span><span class="op">,</span> entier_aleatoir)<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> booleen_aleatoir<span class="op">:</span> <span class="dt">bool</span> <span class="op">=</span> <span class="pp">rand::</span>random()<span class="op">;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{}&quot;</span><span class="op">,</span> booleen_aleatoir)<span class="op">;</span></span></code></pre></div>
+<p>Les éléments d’une bibliothèque sont accessibles via une sorte de dossier du même nom, ici <code>rand::</code>, donc si on avait utilisé la bibliothèque <code>log</code> on aurait noté <code>log::</code>.</p>
+<p>Notons le même phénomène qu’avec la fonction <code>user_input</code>, la fonction <code>random</code> semble pouvoir retourner différents types. Patience, j’expliquerai bientôt ce qui se cache derrière cette magie noir.</p>
+<h2 id="répertoire-officiel">Répertoire officiel</h2>
+<p>Pour voir toutes les biblihothèques disponibles, il faut se rendre sur <a href="https://crates.io">https://crates.io</a>. Par ailleur, les biblihothèques en Rust sont appelés des <code>crate</code>s.</p>
+<h2 id="bibliothèque-standard">Bibliothèque standard</h2>
+<p>Il est possible d’explorer la bibliothèque standard en consultant sa documentation sur <a href="https://doc.rust-lang.org/std/">https://doc.rust-lang.org/std/</a>.</p>
+<p>Sans connexion internet, si la command <code>rustup</code> est installé, on peut ouvrir la doc avec :</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rustup</span> doc <span class="at">--std</span></span></code></pre></div>
+<h2 id="documentation">Documentation</h2>
+<p>La documentation des bibliothèques est normalement accessible sur <a href="https://crates.io">https://crates.io</a>.</p>
+    </body>
+</html>

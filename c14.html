@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+14
+" class="index-link">← retour</a>
+<h1 id="afficher">Afficher</h1>
+<p>On a vu que l’on pouvait afficher des valeurs de la façon suivante:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> mon_nom<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span> <span class="op">=</span> <span class="st">&quot;Eddie&quot;</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> mon_age<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> <span class="dv">22</span><span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;Je m&#39;appelle {}.&quot;</span><span class="op">,</span> mon_nom)<span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;J&#39;ai {} ans.&quot;</span><span class="op">,</span> mon_age)<span class="op">;</span></span></code></pre></div>
+<p>Mais maintenant essayons d’afficher un tableau :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="kw">mut</span> tableau<span class="op">:</span> [<span class="dt">u32</span><span class="op">;</span> <span class="dv">10</span>] <span class="op">=</span> [<span class="dv">0</span><span class="op">;</span> <span class="dv">10</span>]<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{}&quot;</span><span class="op">,</span> tableau)<span class="op">;</span> <span class="co">// ERROR</span></span></code></pre></div>
+<p>Le compilateur se pleins que ce type ne peut pas être affiché. Pour corriger ce problème, il faut remplacer <code>{}</code> par <code>{:?}</code> :</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> <span class="kw">mut</span> tableau<span class="op">:</span> [<span class="dt">u32</span><span class="op">;</span> <span class="dv">10</span>] <span class="op">=</span> [<span class="dv">0</span><span class="op">;</span> <span class="dv">10</span>]<span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{:?}&quot;</span><span class="op">,</span> tableau)<span class="op">;</span> <span class="co">// OK</span></span></code></pre></div>
+<p>Il existe deux façons d’afficher, l’une est une représentation textuel d’un type (<code>Display</code>), l’autre est une inspection de sa composition (<code>Debug</code>). Pour bien saisir la différence entre les deux, essayons avec cette chaîne de caractères :</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> s <span class="op">=</span> <span class="st">&quot;Hello </span><span class="sc">\n\t</span><span class="st">World!  &quot;</span><span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;display: {}&quot;</span><span class="op">,</span> s)<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;debug: {:?}&quot;</span><span class="op">,</span> s)<span class="op">;</span></span></code></pre></div>
+<p>Vois-tu en quoi ces deux affichages sont différents ?</p>
+    </body>
+</html>

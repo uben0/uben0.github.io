@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+03
+" class="index-link">← retour</a>
+<h1 id="exemples">Exemples</h1>
+<h2 id="afficher">Afficher</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> mon_nom<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span> <span class="op">=</span> <span class="st">&quot;Eddie&quot;</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> mon_age<span class="op">:</span> <span class="dt">u32</span> <span class="op">=</span> <span class="dv">22</span><span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;Je m&#39;appelle {}.&quot;</span><span class="op">,</span> mon_nom)<span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;J&#39;ai {} ans.&quot;</span><span class="op">,</span> mon_age)<span class="op">;</span></span></code></pre></div>
+<p>Ce programme affiche:</p>
+<pre><code>Je m&#39;appelle Eddie.
+J&#39;ai 22 ans.</code></pre>
+<p>Ce qui permet d’afficher est une <strong>macro</strong> appelée <code>println</code>, ce n’est pas une fonction, cela est visible car le nom d’une macro est suivi d’un <code>!</code>. Les macro permettent de faire pleins de choses mais c’est un sujet à voir plus tard, pour le moment comprendre comment utiliser <code>println</code> est suffisant.</p>
+<p>On peut afficher plusieurs valeurs dans un seul appel à <code>println</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;{} {} {} {}&quot;</span><span class="op">,</span> <span class="dv">42</span><span class="op">,</span> <span class="cn">true</span><span class="op">,</span> <span class="st">&quot;Salut&quot;</span><span class="op">,</span> <span class="ch">&#39;💖&#39;</span>)<span class="op">;</span></span></code></pre></div>
+<pre><code>42 true Salut 💖</code></pre>
+<h2 id="déclaration-et-appelle-dune-fonction">Déclaration et appelle d’une fonction</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> add(a<span class="op">:</span> <span class="dt">i32</span><span class="op">,</span> b<span class="op">:</span> <span class="dt">i32</span>) <span class="op">-&gt;</span> <span class="dt">i32</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> a <span class="op">+</span> b<span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> a<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">35</span><span class="op">;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> b<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> <span class="dv">7</span><span class="op">;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> c<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> add(a<span class="op">,</span> b)<span class="op">;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="pp">println!</span>(<span class="st">&quot;{} + {} = {}&quot;</span><span class="op">,</span> a<span class="op">,</span> b<span class="op">,</span> c)<span class="op">;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Ce programme affiche:</p>
+<pre><code>35 + 7 = 42</code></pre>
+<p>On remarque que le type de retour d’une fonction est indiqué après ses paramètres par <code>-&gt; type</code>. Notons que la fonction <code>main</code> ne retourne pas de valeur (il y a la possibilité de lui en faire retourner une, mais ce sera expliqué plus tard). Comme en C, la fonction <code>main</code> ne doit pas être appelée dans le programme, car elle est le point d’entré du programme lui même.</p>
+    </body>
+</html>

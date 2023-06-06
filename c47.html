@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tutoriel Rust</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<a href="index.html#c
+47
+" class="index-link">← retour</a>
+<h1 id="les-closures">Les closures</h1>
+<p>Il est possible de déclarer une variable qui stocke une fonction (ou plutôt qui réfère une fonction).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> g(x<span class="op">:</span> <span class="dt">i32</span>) <span class="op">-&gt;</span> <span class="dt">i32</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    x <span class="op">*</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">3</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> f<span class="op">:</span> <span class="kw">fn</span>(<span class="dt">i32</span>)<span class="op">-&gt;</span><span class="dt">i32</span> <span class="op">=</span> g<span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="pp">println!</span>(<span class="st">&quot;f(3) = {}&quot;</span><span class="op">,</span> f(<span class="dv">3</span>))<span class="op">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Le type de <code>f</code> est <code>fn(i32)-&gt;i32</code>, et oui, c’est un type dont je n’avais pas encore parlé. Le type <code>fn</code> est le type d’une fonction.</p>
+<h2 id="une-closure">Une closure</h2>
+<p>Il est possible de déclarer une fonction sous forme de valeur. On appelle ça une closure.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> f <span class="op">=</span> <span class="op">|</span>x<span class="op">:</span> <span class="dt">i32</span><span class="op">|</span> x <span class="op">*</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="pp">println!</span>(<span class="st">&quot;f(3) = {}&quot;</span><span class="op">,</span> f(<span class="dv">3</span>))<span class="op">;</span></span></code></pre></div>
+<h2 id="les-traits-fn-fnmut-et-fnonce">Les traits <code>Fn</code>, <code>FnMut</code> et <code>FnOnce</code></h2>
+<p>Il serait pratique de pouvoir accepter des fonctions comme paramètre de fonctions, comme pour la méthode <code>map</code> d’un itérateur qui utilise la fonction qui lui est passé pour transformer ses éléments.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">for</span> i <span class="kw">in</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">.</span>iter()<span class="op">.</span>map(<span class="op">|</span>x<span class="op">|</span> <span class="dv">2</span> <span class="op">*</span> x) <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="pp">println!</span>(<span class="st">&quot;{}&quot;</span><span class="op">,</span> i)<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<pre><code>2
+4
+6</code></pre>
+<p>On peut imaginer créer notre propre fonction accèptant en paramètre un fonction prenant un <code>i32</code> et renvoyant un <code>i32</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> test_function(f<span class="op">:</span> <span class="kw">fn</span>(<span class="dt">i32</span>)<span class="op">-&gt;</span><span class="dt">i32</span>) <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">10</span> <span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;f({}) = {}&quot;</span><span class="op">,</span> i<span class="op">,</span> f(i))<span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Testons-la !</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>test_function(<span class="op">|</span>x<span class="op">|</span> x <span class="op">+</span> <span class="dv">10</span>)<span class="op">;</span></span></code></pre></div>
+<pre><code>f(0) = 10
+f(1) = 11
+f(2) = 12
+f(3) = 13
+f(4) = 14
+f(5) = 15
+f(6) = 16
+f(7) = 17
+f(8) = 18
+f(9) = 19</code></pre>
+<p>Magnifique !</p>
+<h3 id="cependant">Cependant…</h3>
+<p>Imaginons que l’on souhaite utiliser une variable tiers.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> n<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> user_input()<span class="op">;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>test_function(<span class="op">|</span>x<span class="op">|</span> x <span class="op">+</span> n)<span class="op">;</span> <span class="co">// ERROR</span></span></code></pre></div>
+<p>Le compilateur se plein que les types ne correspondent pas, que le type attendu est un poiteur de fonction (<code>fn</code>) mais que le type passé est une closure.</p>
+<p>Une closure sans environement (qui ne capture pas de variable) est équivalente à une fonction classique. Mais ce n’est plus le cas lorsqu’elle utilse (capture) des variables de leur environement (hors c’est souvent très utile), car elle doit respecter leur duré de vie. Son type devient opaque. Cependant, les closures implémentent un des traits <code>Fn</code>, <code>FnMut</code> ou <code>FnOnce</code>. Je ne vais pas expliquer la différence entre ces trois traits mais tu peux consulter la documentation pour plus d’informations.</p>
+<p>Ces traits permettent d’écrire du code générique acceptant les closures.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> test_function<span class="op">&lt;</span>F<span class="op">:</span> <span class="bu">Fn</span>(<span class="dt">i32</span>)<span class="op">-&gt;</span><span class="dt">i32</span><span class="op">&gt;</span>(f<span class="op">:</span> F) <span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">10</span> <span class="op">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="pp">println!</span>(<span class="st">&quot;f({}) = {}&quot;</span><span class="op">,</span> i<span class="op">,</span> f(i))<span class="op">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> n<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> user_input()<span class="op">;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>test_function(<span class="op">|</span>x<span class="op">|</span> x <span class="op">+</span> n)<span class="op">;</span></span></code></pre></div>
+<h2 id="conclusion">Conclusion</h2>
+<p>Tu ne seras probablement pas amené à écrire des fonctions acceptant des closures mais tu seras fréquement amené à en utiliser comme pour la méthode <code>map</code> d’un itérateur qui s’avère très utile.</p>
+    </body>
+</html>
